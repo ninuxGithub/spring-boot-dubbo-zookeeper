@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: provider
+    version: 1.0
+server:
+  port: 9090
+
+management:
+  endpoint:
+    dubbo-configs:
+      enabled: true
+    dubbo:
+      enabled: true
+    dubbo-servces:
+      enabled: true
+    dubbo-properties:
+      enabled: true
+    dubbo-shutdown:
+      enabled: true
+    dubbo-refrences:
+      enabled: true
+  health:
+    dubbo:
+      status:
+        defaults: memory
+        extras: load,threadpool
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+dubbo:
+  registry:
+    protocal: zookeeper
+    address: 10.1.51.96:2181
+    id: zookeeper-registry
+  protocol:
+    port: 20880
+    name: dubbo
+    id: dubbo
+    status: server
+  application:
+    id: provider-service-id
+    name: provider-service-name
+    qos-enable: true
+    qos-port: 22222
+  scan:
+    base-packages: com.example.provider.service
