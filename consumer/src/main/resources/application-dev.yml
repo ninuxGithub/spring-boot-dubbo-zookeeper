@@ -1,23 +1,29 @@
 
 spring:
   application:
-    name: consumer-service
+    name: dubbo-consumer
     version: 1.0
 server:
   port: 9091
 
 dubbo:
+  application:
+    id: dubbo-consumer
+    name: dubbo-consumer
   protocol:
     id: dubbo
     name: dubbo
-    port: 20882
-  application:
-    id: consumer-service
-    name: consumer-service
+#    port: 20882
+#    status: server
   registry:
-    protocal: zookeeper
+    protocol: zookeeper
     address: 10.1.51.96:2181
     id: zookeeper-registry
+
+endpoints:
+  dubbo:
+    enabled: true
+
 management:
   endpoint:
     dubbo-configs:

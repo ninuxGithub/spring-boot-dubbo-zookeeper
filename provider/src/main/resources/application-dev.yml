@@ -1,10 +1,43 @@
 spring:
   application:
-    name: provider
+    name: dubbo-provider
     version: 1.0
 server:
   port: 9090
 
+dubbo:
+  scan:
+    basePackages: com.example.provider.service
+  application:
+    id: dubbo-provider
+    name: dubbo-provider
+    qos-enable: true
+    qos-port: 22222
+
+  protocol:
+    id: dubbo
+    name: dubbo
+    port: 20882
+    status: server
+  registry:
+    protocol: zookeeper
+    address: 10.1.51.96:2181
+#    address: 10.1.51.96:2181,10.1.51.96:2182
+    id: zookeeper-registry
+
+
+#  registries:
+#    aa:
+#      address: zookeeper://10.1.51.96:2181
+#    bb:
+#      address: zookeeper://10.1.51.96:2182
+#  registry:
+#    protocol: zookeeper
+#    address: zookeeper://10.1.51.96:2181?backup=10.1.51.96:2182
+#    id: zookeeper-registry
+
+
+##endpoint
 management:
   endpoint:
     dubbo-configs:
@@ -28,21 +61,3 @@ management:
     web:
       exposure:
         include: '*'
-
-dubbo:
-  registry:
-    protocal: zookeeper
-    address: 10.1.51.96:2181
-    id: zookeeper-registry
-  protocol:
-    port: 20880
-    name: dubbo
-    id: dubbo
-    status: server
-  application:
-    id: provider-service-id
-    name: provider-service-name
-    qos-enable: true
-    qos-port: 22222
-  scan:
-    base-packages: com.example.provider.service
