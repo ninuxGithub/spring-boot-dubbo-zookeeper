@@ -13,7 +13,6 @@ dubbo:
     name: dubbo-provider
     qos-enable: true
     qos-port: 22222
-
   protocol:
     id: dubbo
     name: dubbo
