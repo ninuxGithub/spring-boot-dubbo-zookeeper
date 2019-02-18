@@ -1,4 +1,4 @@
-package com.example.api.test;
+package com.example.api.regdis;
 
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
