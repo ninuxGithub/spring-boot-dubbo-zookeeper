@@ -14,10 +14,10 @@ public class TestLock {
         // 需要手动创建节点 /locker
 
         ZkClient zkClient1 = new ZkClient("10.1.51.96:2181", 5000, 5000, new BytesPushThroughSerializer());
-        LockImpl lock1 = new LockImpl(zkClient1, "/locker");
+        LockImpl lock1 = new LockImpl(zkClient1, "/locker","client1");
 
         ZkClient zkClient2 = new ZkClient("10.1.51.96:2181", 5000, 5000, new BytesPushThroughSerializer());
-        final LockImpl lock2 = new LockImpl(zkClient2, "/locker");
+        final LockImpl lock2 = new LockImpl(zkClient2, "/locker", "client2");
 
         try {
             lock1.getLock();

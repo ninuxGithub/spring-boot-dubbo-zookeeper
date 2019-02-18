@@ -15,10 +15,10 @@ public class Test {
     public static void main(String[] args) throws InterruptedException {
 
         // 需要手动创建节点 /locker
-        int num = 100;
+        int num = 10;
         CountDownLatch latch = new CountDownLatch(num);
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < num; i++) {
             final int n = i;
 
             new Thread(new Runnable() {
@@ -28,10 +28,10 @@ public class Test {
                     try {
                         latch.await();
                         ZkClient zkClient = new ZkClient("10.1.51.96:2181", 5000, 50000, new BytesPushThroughSerializer());
-                        LockImpl lock = new LockImpl(zkClient, "/locker");
+                        LockImpl lock = new LockImpl(zkClient, "/locker", "client"+n);
                         lock.getLock();
                         System.out.println("Client" + n + " is get lock");
-                        TimeUnit.SECONDS.sleep(2);
+                        TimeUnit.SECONDS.sleep(5);
                         lock.releaseLock();
                         System.out.println("Client" + n + " is released lock");
                     } catch (Exception e) {

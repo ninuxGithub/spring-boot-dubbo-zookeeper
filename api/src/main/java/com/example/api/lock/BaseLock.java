@@ -21,12 +21,14 @@ public class BaseLock {
     private final String path;
     private final String basePath;
     private final String lockName;
+    private final String clientName;
 
     private static final Integer MAX_RETRY_COUNT = 10;
 
-    public BaseLock(ZkClient zkClient, String basePath, String lockName) {
+    public BaseLock(ZkClient zkClient, String basePath, String lockName, String clientName) {
         this.zkClient = zkClient;
         this.basePath = basePath;
+        this.clientName = clientName;
         this.path = basePath.concat("/").concat(lockName);
         if (!zkClient.exists(basePath)) {
             zkClient.createEphemeral(basePath);
@@ -135,7 +137,7 @@ public class BaseLock {
     }
 
     private String createLockNode(ZkClient zkClient, String path) throws Exception {
-        return zkClient.createEphemeralSequential(path, new byte[0]);
+        return zkClient.createEphemeralSequential(path, clientName.getBytes());
     }
 
 

@@ -18,8 +18,8 @@ public class LockImpl extends BaseLock implements ZLock {
 
     private String lockPath;
 
-    public LockImpl(ZkClient zkClient, String basePath) {
-        super(zkClient, basePath, LOCK_NAME);
+    public LockImpl(ZkClient zkClient, String basePath,String clientName) {
+        super(zkClient, basePath, LOCK_NAME,clientName);
         this.basePath = basePath;
     }
 
