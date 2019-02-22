@@ -1,4 +1,8 @@
 
+demo:
+  name: java
+  age: 20
+
 spring:
   application:
     name: dubbo-consumer
