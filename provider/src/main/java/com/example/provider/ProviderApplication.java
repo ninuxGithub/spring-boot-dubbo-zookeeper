@@ -8,7 +8,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 public class ProviderApplication {
 
     public static void main(String[] args) {
-        new SpringApplicationBuilder(ProviderApplication.class).web(WebApplicationType.SERVLET).run(args);
+        new SpringApplicationBuilder(ProviderApplication.class).web(WebApplicationType.NONE).run(args);
     }
 
 }
