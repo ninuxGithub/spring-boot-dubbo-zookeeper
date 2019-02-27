@@ -7,6 +7,16 @@ spring:
   application:
     name: dubbo-consumer
     version: 1.0
+  activemq:
+    broker-url: tcp://10.1.51.96:61616 # activemq broker Url config
+    user: admin
+    password: admin
+    pool:
+      enabled: true
+      max-connections: 10
+    queue-name: test.msg.queue
+    out-queue-name: test.msg.out-queue
+    topic-name: test.msg.topic
 server:
   port: 9091
 
