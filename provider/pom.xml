@@ -37,15 +37,14 @@
         </dependency>
 
         <!--WebApplicationType.NONE-->
-       <!-- <dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>-->
-        <!--<dependency>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-        -->
         <dependency>
             <groupId>com.alibaba.boot</groupId>
             <artifactId>dubbo-spring-boot-actuator</artifactId>
@@ -70,6 +69,14 @@
             <artifactId>activemq-pool</artifactId>
             <version>5.14.5</version>
         </dependency>
+
+        <!--elasticsearch 依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+            <version>2.0.3.RELEASE</version>
+        </dependency>
+
 
     </dependencies>
 

@@ -2,6 +2,8 @@ spring:
   application:
     name: dubbo-provider
     version: 1.0
+
+  ### activemq config
   activemq:
     broker-url: tcp://10.1.51.96:61616 # activemq broker Url config
     user: admin
@@ -12,6 +14,15 @@ spring:
     queue-name: test.msg.queue
     out-queue-name: test.msg.out-queue
     topic-name: test.msg.topic
+
+  ### elasticsearch config
+  data:
+    elasticsearch:
+      cluster-name: my-application
+      cluster-nodes: 10.1.51.96:9300
+      repositories:
+        enabled: true
+
 server:
   port: 9090
 
