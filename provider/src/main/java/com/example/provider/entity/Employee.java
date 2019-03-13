@@ -12,7 +12,7 @@ import java.io.Serializable;
 /**
  * @author shenzm
  */
-@Document(indexName = "company", type = "employee", shards = 1, replicas = 0, refreshInterval = "-1")
+@Document(indexName = "company", type = "_doc", shards = 1, replicas = 0, refreshInterval = "-1")
 public class Employee implements Serializable {
     @Id
     private String id;

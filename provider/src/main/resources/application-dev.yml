@@ -81,3 +81,10 @@ management:
     web:
       exposure:
         include: '*'
+logging:
+  level:
+    org.elasticsearch: info
+    org.springframework: info
+    org.springframework.data.elasticsearch.repository: info
+  file: log\provider.log
+
