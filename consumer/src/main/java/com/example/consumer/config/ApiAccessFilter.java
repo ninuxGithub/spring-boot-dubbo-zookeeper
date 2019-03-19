@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -149,7 +148,7 @@ public class ApiAccessFilter implements Filter {
         if (!valid) {
             writeErrJson(response, new Message(errJson));
         } else {
-            chain.doFilter((HttpServletRequest)request, (HttpServletResponse)response);
+            chain.doFilter(request, response);
         }
     }
 
