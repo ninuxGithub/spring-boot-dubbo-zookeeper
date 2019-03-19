@@ -2,9 +2,8 @@ package com.example.consumer.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.example.api.service.HelloService;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.consumer.bean.Message;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author shenzm
@@ -23,9 +22,9 @@ public class HelloController {
     )
     private HelloService helloService;
 
-    @RequestMapping(value ="/hello/{name}")
-    public String sayHello(@PathVariable String name){
-        return helloService.sayHello(name);
+    @RequestMapping(value ="/commonApi/hello", method = RequestMethod.GET)
+    public Message sayHello(@RequestParam(value = "name") String name){
+        return new Message(helloService.sayHello(name));
     }
 
 
