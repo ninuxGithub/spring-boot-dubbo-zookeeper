@@ -10,4 +10,7 @@ import com.example.consumer.bean.UserNew;
 public interface UserNewService {
 
     public void saveUser(UserNew userNew);
+
+
+    public void saveUser2(UserNew userNew);
 }

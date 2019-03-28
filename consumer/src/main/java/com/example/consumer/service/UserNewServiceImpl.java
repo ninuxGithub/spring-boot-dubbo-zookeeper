@@ -2,13 +2,11 @@ package com.example.consumer.service;
 
 import com.example.consumer.bean.UserNew;
 import com.example.consumer.repository.UserNewRepository;
-import org.springframework.aop.framework.ReflectiveMethodInvocation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionInterceptor;
 
 /**
  * @author shenzm
@@ -21,6 +19,14 @@ public class UserNewServiceImpl implements UserNewService {
 
     @Autowired
     private UserNewRepository userNewRepository;
+
+    //           tx          抛异常    保存情况
+    //  save     REQUIRED      no          no
+    //  save2    REQUIRES_NEW  yes         no
+
+    //  save     REQUIRED      yes         no
+    //  save2    REQUIRES_NEW  no          no
+
 
     @Transactional(
             value = "mysqlTransactionManager",
@@ -35,7 +41,28 @@ public class UserNewServiceImpl implements UserNewService {
         //TransactionInterceptor.invoke()
         //org.springframework.transaction.interceptor.TransactionAspectSupport
         userNewRepository.save(userNew);
-        int a = 1, b = 0;
-        System.out.println(a / b);
+
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        UserNew user = new UserNew();
+        user.setName("22222");
+        user.setAge(222);
+        saveUser2(user);
+        throw new RuntimeException("异常发生了");
+
+    }
+
+    @Transactional(
+            value = "mysqlTransactionManager",
+            rollbackFor = {Exception.class, RuntimeException.class},
+            propagation = Propagation.REQUIRES_NEW,
+            isolation = Isolation.DEFAULT
+    )
+    @Override
+    public void saveUser2(UserNew user) {
+        userNewRepository.save(user);
     }
 }
