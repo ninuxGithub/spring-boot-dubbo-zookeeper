@@ -39,10 +39,31 @@ public class ApiTestController {
         try {
             TreeMap<String, Object> paramMap = getCommParams("sayHello");
             paramMap.put("name", "java");
-            String signUrl = Sign.makeSignPlainText(paramMap, "GET", "127.0.0.1:9091", "/commonApi/hello");
+            String signUrl = Sign.makeSignPlainText(paramMap, "GET", "127.0.0.1:9091", "/commonApi/sayHello");
             String signature = Sign.sign(signUrl, SecretKey, "HmacSHA256");
             paramMap.put("Signature", signature);
-            HttpResult httpResult = HttpClientUtil.doGet("http://127.0.0.1:9091/commonApi/hello", paramMap);
+            HttpResult httpResult = HttpClientUtil.doGet("http://127.0.0.1:9091/commonApi/sayHello", paramMap);
+            String responseBody = httpResult.getBody();
+            Map<String, Object> jsonMap = jsonBinder.fromJson(responseBody, HashMap.class);
+            resultMap.put("jsonMap", jsonMap);
+        } catch (Exception e) {
+            resultMap.put("msg", e.getMessage());
+        }
+        return resultMap;
+
+
+    }
+    @RequestMapping("/api/test2")
+    public Map<String, Object> test2() {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            TreeMap<String, Object> paramMap = getCommParams("sayGoodbye");
+            paramMap.put("name", "java");
+            paramMap.put("age", "20");
+            String signUrl = Sign.makeSignPlainText(paramMap, "GET", "127.0.0.1:9091", "/commonApi/sayGoodbye");
+            String signature = Sign.sign(signUrl, SecretKey, "HmacSHA256");
+            paramMap.put("Signature", signature);
+            HttpResult httpResult = HttpClientUtil.doGet("http://127.0.0.1:9091/commonApi/sayGoodbye", paramMap);
             String responseBody = httpResult.getBody();
             Map<String, Object> jsonMap = jsonBinder.fromJson(responseBody, HashMap.class);
             resultMap.put("jsonMap", jsonMap);

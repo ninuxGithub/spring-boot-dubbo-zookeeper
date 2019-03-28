@@ -12,15 +12,13 @@ import org.springframework.stereotype.Component;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.nio.charset.Charset;
 import java.util.*;
 
 /**
  * 对请求路径符合： /commonApi/* 的所有的路径进行过滤
- *
+ * <p>
  * 在过滤器的doFilter 方法进行签名的过滤
  *
  * @author shenzm
@@ -56,11 +54,12 @@ public class ApiAccessFilter implements Filter {
 
     /**
      * 通过请求的参数secretId 查询对应的用户的SecretKey
+     *
      * @param secretId
      * @return
      */
-    public String mockQuerydb(String secretId){
-        if("12345678".equals(secretId)){
+    public String mockQuerydb(String secretId) {
+        if ("12345678".equals(secretId)) {
             return "abcdefg";
         }
         return null;
@@ -68,6 +67,16 @@ public class ApiAccessFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+
+        HttpServletRequest req = (HttpServletRequest) request;
+        String requestURI = req.getRequestURI();
+        //如果请求的不是是公共api接口， 直接通过请求， 如果是commonApi的请求，需要验证签名
+        //swagger2 页面可见，但是无法请求
+        if (!requestURI.contains("/commonApi/")){
+            chain.doFilter(request, response);
+            return;
+        }
+        logger.info("ApiAccessFilter 拦截url :{}",requestURI);
 
         String errJson = null;
         boolean valid = true;
@@ -100,31 +109,31 @@ public class ApiAccessFilter implements Filter {
                 }
 
                 if (valid) {
-                    HttpServletRequest req = (HttpServletRequest) request;
+
                     String remoteHost = request.getRemoteHost();
                     int serverPort = request.getServerPort();
                     String requestHost = remoteHost + ":" + serverPort;
-                    String requestURI = req.getRequestURI();
+                    //String requestURI = req.getRequestURI();
                     String requestMethod = req.getMethod();
                     String signatureMethod = req.getParameter(SIGNATUREMETHOD);
                     String reqestSignature = req.getParameter(SIGNATURE);
 
-                    logger.info("requestHost : {}",requestHost);
-                    logger.info("requestURI :{}",requestURI);
-                    logger.info("requestMethod:{}",requestMethod);
-                    logger.info("signatureMethod:{}",signatureMethod);
-                    logger.info("reqestSignature:{}",reqestSignature);
+                    logger.info("requestHost : {}", requestHost);
+                    logger.info("requestURI :{}", requestURI);
+                    logger.info("requestMethod:{}", requestMethod);
+                    logger.info("signatureMethod:{}", signatureMethod);
+                    logger.info("reqestSignature:{}", reqestSignature);
 
                     try {
                         String signUrl = Sign.makeSignPlainText(paramMap, requestMethod, requestHost, requestURI);
                         String signature = Sign.sign(signUrl, mockQuerydb(secretId), signatureMethod);
 
-                        logger.info("reqestSignature : {} signature :{}", reqestSignature, signature);
+                        logger.info("server calculate signature :{}", signature);
 
                         //对比签名是否一致
                         if (reqestSignature.equals(signature)) {
                             valid = true;
-                            logger.info("签名验证通过，调用=====>chain.doFilter");
+                            logger.info("签名验证通过，调用=====>chain.doFilter--->{}",requestMethod);
                         } else {
                             valid = false;
                             errJson = "签名不正确";
@@ -142,7 +151,7 @@ public class ApiAccessFilter implements Filter {
             }
         } else {
             valid = false;
-            errJson = "请求参数必须包含参数：Action";
+            errJson = "请求未携带签名";
         }
 
         if (!valid) {
@@ -153,12 +162,11 @@ public class ApiAccessFilter implements Filter {
     }
 
     private void writeErrJson(ServletResponse response, Message message) throws IOException {
-        OutputStreamWriter osw = new OutputStreamWriter(response.getOutputStream(), Charset.forName("UTF-8"));
-        PrintWriter pw = new PrintWriter(osw, true);
-        pw.write(JSONObject.toJSONString(message));
-        pw.flush();
-        pw.close();
-        osw.close();
+        response.setCharacterEncoding("utf-8");
+        HttpServletResponse resp = (HttpServletResponse) response;
+        resp.setHeader("content-type", "text/html;charset=utf-8");
+        ServletOutputStream outputStream = response.getOutputStream();
+        outputStream.write(JSONObject.toJSONString(message).getBytes());
     }
 
     @Override
