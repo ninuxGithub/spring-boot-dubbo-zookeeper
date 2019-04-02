@@ -46,25 +46,25 @@ public class DruidConfiguration {
 	}
 
 	@Bean
-	public DataSource druidDataSource(@Value("${spring.datasource.url}") String url,
-			@Value("${spring.datasource.driver-class-name}") String driver,
-			@Value("${spring.datasource.username}") String userName,
-			@Value("${spring.datasource.password}") String password,
-			@Value("${spring.datasource.maxActive}") int maxActive,
-			@Value("${spring.datasource.filters}") String filters,
-			@Value("${spring.datasource.initialSize}") int initialSize,
-			@Value("${spring.datasource.minIdle}") int minIdle,
-			@Value("${spring.datasource.maxWait}") int maxWait,
-			@Value("${spring.datasource.timeBetweenEvictionRunsMillis}") int timeBetweenEvictionRunsMillis,
-			@Value("${spring.datasource.minEvictableIdleTimeMillis}") int minEvictableIdleTimeMillis,
-			@Value("${spring.datasource.validationQuery}") String validationQuery,
-			@Value("${spring.datasource.testWhileIdle}") boolean testWhileIdle,
-			@Value("${spring.datasource.testOnBorrow}") boolean testOnBorrow,
-			@Value("${spring.datasource.testOnReturn}") boolean testOnReturn,
-			@Value("${spring.datasource.poolPreparedStatements}") boolean poolPreparedStatements,
-			@Value("${spring.datasource.maxPoolPreparedStatementPerConnectionSize}") int maxPoolPreparedStatementPerConnectionSize,
-			@Value("${spring.datasource.connectionProperties}") String connectionProperties,
-			@Value("${spring.datasource.useGlobalDataSourceStat}") boolean useGlobalDataSourceStat
+	public DataSource druidDataSource(@Value("${spring.datasource.mysql.url}") String url,
+			@Value("${spring.datasource.mysql.driver-class-name}") String driver,
+			@Value("${spring.datasource.mysql.username}") String userName,
+			@Value("${spring.datasource.mysql.password}") String password,
+			@Value("${spring.datasource.mysql.maxActive}") int maxActive,
+			@Value("${spring.datasource.mysql.filters}") String filters,
+			@Value("${spring.datasource.mysql.initialSize}") int initialSize,
+			@Value("${spring.datasource.mysql.minIdle}") int minIdle,
+			@Value("${spring.datasource.mysql.maxWait}") int maxWait,
+			@Value("${spring.datasource.mysql.timeBetweenEvictionRunsMillis}") int timeBetweenEvictionRunsMillis,
+			@Value("${spring.datasource.mysql.minEvictableIdleTimeMillis}") int minEvictableIdleTimeMillis,
+			@Value("${spring.datasource.mysql.validationQuery}") String validationQuery,
+			@Value("${spring.datasource.mysql.testWhileIdle}") boolean testWhileIdle,
+			@Value("${spring.datasource.mysql.testOnBorrow}") boolean testOnBorrow,
+			@Value("${spring.datasource.mysql.testOnReturn}") boolean testOnReturn,
+			@Value("${spring.datasource.mysql.poolPreparedStatements}") boolean poolPreparedStatements,
+			@Value("${spring.datasource.mysql.maxPoolPreparedStatementPerConnectionSize}") int maxPoolPreparedStatementPerConnectionSize,
+			@Value("${spring.datasource.mysql.connectionProperties}") String connectionProperties,
+			@Value("${spring.datasource.mysql.useGlobalDataSourceStat}") boolean useGlobalDataSourceStat
 
 	) {
 		DruidDataSource dataSource = new DruidDataSource();

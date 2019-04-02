@@ -5,27 +5,38 @@ demo:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8
-    username: root
-    password: root
-    driver-class-name: com.mysql.jdbc.Driver
-    type: com.alibaba.druid.pool.DruidDataSource
-    initialSize: 5
-    minIdle: 5
-    maxActive: 20
-    maxWait: 60000
-    timeBetweenEvictionRunsMillis: 60000
-    minEvictableIdleTimeMillis: 300000
-    validationQuery: SELECT 1 from dual
-    testWhileIdle: true
-    testOnBorrow: true
-    testOnReturn: true
-    poolPreparedStatements: true
-    maxPoolPreparedStatementPerConnectionSize: 20
-    filters: stat,wall,log4j
-    useGlobalDataSourceStat: true
-    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-
+    mysql:
+      url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8
+      username: root
+      password: root
+      driver-class-name: com.mysql.jdbc.Driver
+      type: com.alibaba.druid.pool.DruidDataSource
+      initialSize: 5
+      minIdle: 5
+      maxActive: 20
+      maxWait: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1 from dual
+      testWhileIdle: true
+      testOnBorrow: true
+      testOnReturn: true
+      poolPreparedStatements: true
+      maxPoolPreparedStatementPerConnectionSize: 20
+      filters: stat,wall,log4j
+      useGlobalDataSourceStat: true
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    sqlserver:
+      url: jdbc:sqlserver://xxxxx:1433;DatabaseName=Minfo
+      username: xxx
+      password: xxx
+      driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+      maxActive: 200
+      minIdle: 50
+      initialSize: 10
+      maxWait: 5000
+      testWileIdle: true
+      validationQuery: select 1
 
   jpa:
     show-sql: true
@@ -101,6 +112,7 @@ management:
 logging:
   level:
     org.springframework.transaction.interceptor: trace
+    com.example.consumer.mapper: debug
 
 
 

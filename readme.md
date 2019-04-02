@@ -71,3 +71,26 @@
         response：抛出异常的类
     @ApiModel：描述一个Model的信息（这种一般用在post创建的时候，使用@RequestBody这样的场景，请求参数无法使用@ApiImplicitParam注解进行描述的时候）
     @ApiModelProperty：描述一个model的属性    
+    
+    
+    
+## 多数据源的配置
+    增加了一个sqlserver 数据源的配置， 测试连接jydb 获取数据
+    
+    insert , select, update, delete demo
+    
+    @Insert("insert into User(name,age) values(#{name},#{age})")
+    int addUser(@Param("name") String name, @Param("age") int age);
+
+    @Select("select * from User where id =#{id}")
+    User findById(@Param("id") int id);
+
+    @Update("update User set name=#{name} where id=#{id}")
+    void updataById(@Param("id") int id, @Param("name") String name);
+
+    @Delete("delete from User where id=#{id}")
+    void deleteById(@Param("id") int id);
+    
+    logging:
+      level:
+        com.example.consumer.mapper: debug  # mybatis 开启debug 显示sql语句

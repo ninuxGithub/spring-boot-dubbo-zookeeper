@@ -17,7 +17,14 @@ public class DBConfig {
     @Bean(name = "mysqlDataSource")
     @Qualifier("mysqlDataSource")
     @Primary
-    @ConfigurationProperties(prefix = "spring.datasource")
+    @ConfigurationProperties(prefix = "spring.datasource.mysql")
+    public DataSource mysqlDataSource() {
+        return DataSourceBuilder.create().type(DruidDataSource.class).build();
+    }
+
+    @Bean(name = "sqlServerDataSource")
+    @Qualifier("sqlServerDataSource")
+    @ConfigurationProperties(prefix = "spring.datasource.sqlserver")
     public DataSource sqlServerDataSource() {
         return DataSourceBuilder.create().type(DruidDataSource.class).build();
     }
