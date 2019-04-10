@@ -94,3 +94,18 @@
     logging:
       level:
         com.example.consumer.mapper: debug  # mybatis 开启debug 显示sql语句
+        
+        
+        
+## git 撤销最后的提交
+
+    git log 命令查看最后几次的提交的commitid
+    
+    git reset --hard commitid1
+    git reset --hard commitid2
+    .....
+    git reset --hard commitidn
+    
+    git push origin HEAD --force
+    
+    这样是暴力的撤销， 撤销的提交部分会被删除，所以撤销之前需要备份好文件

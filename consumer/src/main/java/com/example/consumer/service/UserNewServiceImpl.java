@@ -47,10 +47,10 @@ public class UserNewServiceImpl implements UserNewService {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        UserNew user = new UserNew();
+        /*UserNew user = new UserNew();
         user.setName("22222");
         user.setAge(222);
-        saveUser2(user);
+        saveUser2(user);*/
         throw new RuntimeException("异常发生了");
 
     }
