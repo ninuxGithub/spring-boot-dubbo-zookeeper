@@ -56,7 +56,32 @@ public class TestController {
         UserNew userNew = new UserNew();
         userNew.setAge(12);
         userNew.setName("java");
-        userNewService.saveUser(userNew);
+        userNewService.saveUser2(userNew);
+        return "ok";
+    }
+
+    @RequestMapping("/query/user")
+    public String query(@RequestParam("id") Long id) {
+        if (null == id) {
+            id = 1L;
+        }
+        UserNew userNew = userNewService.queryByUserId(id);
+        System.out.println(userNew);
+        return "ok";
+    }
+
+    @RequestMapping("/update/user")
+    public String update(@RequestParam("id") Long id) {
+        if (null == id) {
+            id = 1L;
+        }
+        userNewService.updateUser(22, "java", 83L);
+        return "ok";
+    }
+
+    @RequestMapping("/remove/user")
+    public String remove() {
+        userNewService.deleteAllInBatch();
         return "ok";
     }
 }

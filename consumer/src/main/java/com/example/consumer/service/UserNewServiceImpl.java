@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserNewServiceImpl implements UserNewService {
 
+
+
     @Autowired
     private UserNewRepository userNewRepository;
 
@@ -64,5 +66,26 @@ public class UserNewServiceImpl implements UserNewService {
     @Override
     public void saveUser2(UserNew user) {
         userNewRepository.save(user);
+    }
+
+    @Override
+    public UserNew queryByUserId(Long id) {
+        return userNewRepository.findUserNewById(id);
+    }
+
+    @Override
+    @Transactional(
+            value = "mysqlTransactionManager",
+            rollbackFor = {Exception.class, RuntimeException.class},
+            propagation = Propagation.REQUIRES_NEW,
+            isolation = Isolation.DEFAULT
+    )
+    public void updateUser(int age, String name, Long id) {
+        userNewRepository.updateUser(age,name,id);
+    }
+
+    @Override
+    public void deleteAllInBatch() {
+        userNewRepository.deleteAllInBatch();
     }
 }

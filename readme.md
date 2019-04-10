@@ -109,3 +109,41 @@
     git push origin HEAD --force
     
     这样是暴力的撤销， 撤销的提交部分会被删除，所以撤销之前需要备份好文件
+    
+
+## mybatis 采用注解的方式
+
+    参考SecuMainMapper ， SqlServerDbConfig  
+    
+## ehcache
+    @Cacheable : 将方法的返回值放入到缓存中, 检查缓存中是否存在key , 如果不存在那么将值加入缓存
+    @Cacheput : 将方法的返回值放入到缓存中, 不检查缓存中是否有对应的key
+    @CacheEvict: 清除key 对应的缓存
+        value ehcache 名称
+        key: 缓存的键值
+        condition: 触发的条件
+        allEntries: 布尔值 是否全部清除  
+
+
+```java
+class Demo{
+    @Cacheable(value = "models", key = "#testModel.name", condition = "#testModel.address !=  '' ")
+    public TestModel getFromMem(TestModel testModel) throws InterruptedException {
+        TimeUnit.SECONDS.sleep(1);
+        testModel.setName(testModel.getName().toUpperCase());
+        return testModel;
+    }
+    @CacheEvict(value = "models", allEntries = true)
+    @Scheduled(fixedDelay = 10000)
+    public void deleteFromRedis() {
+    }
+ 
+    @CacheEvict(value = "models", key = "#name")
+    public void deleteFromRedis(String name) {
+    }
+    @CachePut(value = "models", key = "#name")
+    public TestModel saveModel(String name, String address) {
+        return new TestModel(name, address);
+    }
+}
+```

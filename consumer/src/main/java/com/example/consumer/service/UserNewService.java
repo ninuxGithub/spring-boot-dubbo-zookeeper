@@ -1,6 +1,7 @@
 package com.example.consumer.service;
 
 import com.example.consumer.bean.UserNew;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * @author shenzm
@@ -13,4 +14,12 @@ public interface UserNewService {
 
 
     public void saveUser2(UserNew userNew);
+
+    public UserNew queryByUserId(Long id);
+
+    public void updateUser(int age, String name, Long id);
+
+    public void deleteAllInBatch();
+
+
 }
