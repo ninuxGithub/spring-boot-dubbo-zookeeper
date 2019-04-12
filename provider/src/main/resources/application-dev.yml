@@ -33,7 +33,7 @@ dubbo:
     id: dubbo-provider
     name: dubbo-provider
     qos-enable: true
-    qos-port: 22222
+    qos-port: 33333
   protocol:
     id: dubbo
     name: dubbo
@@ -56,6 +56,24 @@ dubbo:
 #    address: zookeeper://10.1.51.96:2181?backup=10.1.51.96:2182
 #    id: zookeeper-registry
 
+
+motan:
+  registry:
+    regProtocol: zookeeper
+    address: 10.1.51.96:2181
+    requestTimeout: 1000
+    connectTimeout: 3000
+  protocol:
+    name: motan
+    minWorkThread: 20
+    maxWorkThread: 50
+    filter: statistic
+  annotation:
+    package: com.example.provider.motan
+  server:
+    export: 'motan:9999'
+    group: motangroup
+    registry: registry
 
 ##endpoint
 management:

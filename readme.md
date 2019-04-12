@@ -147,3 +147,14 @@ class Demo{
     }
 }
 ```
+
+
+
+## motan 轻量级的rpc
+    参考了： https://github.com/fallsea/spring-boot-starter-motan
+    
+    
+    代码：
+    MotanSwitcherUtil.setSwitcherValue(MotanConstants.REGISTRY_HEARTBEAT_SWITCHER,true);
+    
+    这段代码非常重要， 必须开启， 不然客户端无法发现服务端，客户端的端口一直是0；

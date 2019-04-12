@@ -82,6 +82,28 @@ dubbo:
     address: 10.1.51.96:2181
     id: zookeeper-registry
 
+motan:
+  registry:
+    regProtocol: zookeeper
+    address: 10.1.51.96:2181
+    requestTimeout: 1000
+    connectTimeout: 3000
+  protocol:
+    name: motan
+    minWorkThread: 20
+    maxWorkThread: 50
+    filter: statistic
+  annotation:
+    package: com.example.consumer.motan
+  client:
+    group: motangroup
+    registry: registry
+    protocal: motan
+    check: true
+    requestTimeout: 3000
+    connectTimeout: 5000
+
+
 endpoints:
   dubbo:
     enabled: true
