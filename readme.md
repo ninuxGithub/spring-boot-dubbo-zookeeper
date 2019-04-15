@@ -158,3 +158,23 @@ class Demo{
     MotanSwitcherUtil.setSwitcherValue(MotanConstants.REGISTRY_HEARTBEAT_SWITCHER,true);
     
     这段代码非常重要， 必须开启， 不然客户端无法发现服务端，客户端的端口一直是0；
+    
+    
+## spring 事物
+    mysqlTransactionManager返回的是JpaTransactionManager ， 不支持nested事物
+    
+    所以要测试Propagation.NESTED ， 需要选择DataSourceTransactionManager
+    采用jdbcTemplate去持久化对象
+    
+    
+    Propagation.REQUIRES_NEW : service A 采用Propagation.REQUIRED service B 采用Propagation.REQUIRES_NEW 
+    在A的方法里面调用B的方法， 那么A方法开启一个事物， B开启一个全新的事物，是2个不同的事物；
+    如果A方法抛异常，B不抛异常； A 回滚 ，B事物提交
+    如果A方法抛异常，B抛异常； A 回滚 ，B回滚
+    如果A方法不抛异常，B不抛异常； A  ，B事物提交
+    如果A方法不抛异常，B抛异常；  B方法业务如果么有try, 那么A的事物会捕捉到B事物抛出的异常， A 方法内部如果对B
+    方法进行try 那么  B 回滚 A不会滚； 如果A 对B方法不try那么 都回滚；
+    
+    Propagation.NESTED: 内部事物是外部事物的一个子事物；
+    
+    

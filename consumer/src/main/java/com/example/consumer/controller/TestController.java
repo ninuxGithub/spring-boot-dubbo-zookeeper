@@ -3,7 +3,7 @@ package com.example.consumer.controller;
 import com.example.consumer.bean.SecuMain;
 import com.example.consumer.bean.UserNew;
 import com.example.consumer.mapper.SecuMainMapper;
-import com.example.consumer.service.UserNewService;
+import com.example.consumer.service.UserA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,7 +24,8 @@ import java.util.Map;
 public class TestController {
 
     @Autowired
-    UserNewService userNewService;
+    UserA userA;
+
 
     @Autowired
     SecuMainMapper secuMainMapper;
@@ -55,8 +56,8 @@ public class TestController {
     public String save() {
         UserNew userNew = new UserNew();
         userNew.setAge(12);
-        userNew.setName("java");
-        userNewService.saveUser2(userNew);
+        userNew.setName("aaaaaaaaaaaa");
+        userA.saveUser(userNew);
         return "ok";
     }
 
@@ -65,7 +66,7 @@ public class TestController {
         if (null == id) {
             id = 1L;
         }
-        UserNew userNew = userNewService.queryByUserId(id);
+        UserNew userNew = userA.queryByUserId(id);
         System.out.println(userNew);
         return "ok";
     }
@@ -75,13 +76,13 @@ public class TestController {
         if (null == id) {
             id = 1L;
         }
-        userNewService.updateUser(22, "java", 83L);
+        userA.updateUser(22, "java", 83L);
         return "ok";
     }
 
     @RequestMapping("/remove/user")
     public String remove() {
-        userNewService.deleteAllInBatch();
+        userA.deleteAllInBatch();
         return "ok";
     }
 }

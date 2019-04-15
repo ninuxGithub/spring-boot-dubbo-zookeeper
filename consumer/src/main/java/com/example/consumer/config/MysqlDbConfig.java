@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -28,7 +29,7 @@ import java.util.Map;
 @EnableTransactionManagement
 @EnableJpaRepositories(
         entityManagerFactoryRef = "mysqlEntityManagerFactory",
-        transactionManagerRef = "mysqlTransactionManager",
+        transactionManagerRef = "dataSourceTransactionManager",
         basePackages = {"com.example.consumer.repository"})
 public class MysqlDbConfig {
 
@@ -59,11 +60,18 @@ public class MysqlDbConfig {
         return jpaProperties.getHibernateProperties(new HibernateSettings());
     }
 
+//    @Primary
+//    @Bean(name = "mysqlTransactionManager")
+//    PlatformTransactionManager mysqlTransactionManager(EntityManagerFactoryBuilder builder) {
+//        JpaTransactionManager pm = new JpaTransactionManager(mysqlEntityManagerFactory(builder).getObject());
+//        pm.setGlobalRollbackOnParticipationFailure(false);
+//        return pm;
+//    }
+
     @Primary
-    @Bean(name = "mysqlTransactionManager")
-    PlatformTransactionManager mysqlTransactionManager(EntityManagerFactoryBuilder builder) {
-        JpaTransactionManager pm = new JpaTransactionManager(mysqlEntityManagerFactory(builder).getObject());
-        pm.setGlobalRollbackOnParticipationFailure(false);
+    @Bean(name = "dataSourceTransactionManager")
+    DataSourceTransactionManager dataSourceTransactionManager(EntityManagerFactoryBuilder builder) {
+        DataSourceTransactionManager pm = new DataSourceTransactionManager(mysqlDataSource);
         return pm;
     }
 

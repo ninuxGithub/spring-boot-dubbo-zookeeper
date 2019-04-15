@@ -15,58 +15,51 @@ import org.springframework.transaction.annotation.Transactional;
  */
 
 @Service
-public class UserNewServiceImpl implements UserNewService {
+public class UserAImpl implements UserA {
 
+
+    @Autowired
+    private UserB userB;
+
+    @Autowired
+    UserPersistService userPersistService;
 
 
     @Autowired
     private UserNewRepository userNewRepository;
 
     //           tx          抛异常    保存情况
-    //  save     REQUIRED      no          no
+    //  save     REQUIRED      no          yes
     //  save2    REQUIRES_NEW  yes         no
 
     //  save     REQUIRED      yes         no
     //  save2    REQUIRES_NEW  no          no
 
 
+    //org.springframework.data.jpa.repository.support.CrudMethodMetadataPostProcessor.CrudMethodMetadataPopulatingMethodInterceptor.invoke()
+    //ReflectiveMethodInvocation.proceed()
+    //TransactionInterceptor.invoke()
+    //org.springframework.transaction.interceptor.TransactionAspectSupport
+
+
     @Transactional(
-            value = "mysqlTransactionManager",
+            value = "dataSourceTransactionManager",
             rollbackFor = {Exception.class, RuntimeException.class},
-            propagation = Propagation.REQUIRED,
-            isolation = Isolation.DEFAULT
+            propagation = Propagation.REQUIRED
     )
     @Override
     public void saveUser(UserNew userNew) {
-        //org.springframework.data.jpa.repository.support.CrudMethodMetadataPostProcessor.CrudMethodMetadataPopulatingMethodInterceptor.invoke()
-        //ReflectiveMethodInvocation.proceed()
-        //TransactionInterceptor.invoke()
-        //org.springframework.transaction.interceptor.TransactionAspectSupport
-        userNewRepository.save(userNew);
+        System.out.println("enter save point");
+        userPersistService.save(userNew);
 
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        /*UserNew user = new UserNew();
-        user.setName("22222");
+        UserNew user = new UserNew();
+        user.setName("bbbbbbbbbb");
         user.setAge(222);
-        saveUser2(user);*/
-        throw new RuntimeException("异常发生了");
-
+//        userB.testRequiresNew(user);
+        userB.testNested(user);
+//        throw new RuntimeException("service A 异常");
     }
 
-    @Transactional(
-            value = "mysqlTransactionManager",
-            rollbackFor = {Exception.class, RuntimeException.class},
-            propagation = Propagation.REQUIRES_NEW,
-            isolation = Isolation.DEFAULT
-    )
-    @Override
-    public void saveUser2(UserNew user) {
-        userNewRepository.save(user);
-    }
 
     @Override
     public UserNew queryByUserId(Long id) {
@@ -75,13 +68,13 @@ public class UserNewServiceImpl implements UserNewService {
 
     @Override
     @Transactional(
-            value = "mysqlTransactionManager",
+            value = "dataSourceTransactionManager",
             rollbackFor = {Exception.class, RuntimeException.class},
             propagation = Propagation.REQUIRES_NEW,
             isolation = Isolation.DEFAULT
     )
     public void updateUser(int age, String name, Long id) {
-        userNewRepository.updateUser(age,name,id);
+        userNewRepository.updateUser(age, name, id);
     }
 
     @Override

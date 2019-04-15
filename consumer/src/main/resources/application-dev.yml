@@ -133,8 +133,7 @@ management:
         include: '*'
 logging:
   level:
-    org.springframework.transaction.interceptor: trace
+    org.springframework.transaction: info
     com.example.consumer.mapper: debug
-
 
 
