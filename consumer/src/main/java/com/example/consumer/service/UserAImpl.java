@@ -49,7 +49,6 @@ public class UserAImpl implements UserA {
     )
     @Override
     public void saveUser(UserNew userNew) {
-        System.out.println("enter save point");
         userPersistService.save(userNew);
 
         UserNew user = new UserNew();
@@ -57,7 +56,7 @@ public class UserAImpl implements UserA {
         user.setAge(222);
 //        userB.testRequiresNew(user);
         userB.testNested(user);
-//        throw new RuntimeException("service A 异常");
+        throw new RuntimeException("service A 异常");
     }
 
 
