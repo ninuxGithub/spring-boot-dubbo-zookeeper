@@ -175,6 +175,15 @@ class Demo{
     如果A方法不抛异常，B抛异常；  B方法业务如果么有try, 那么A的事物会捕捉到B事物抛出的异常， A 方法内部如果对B
     方法进行try 那么  B 回滚 A不会滚； 如果A 对B方法不try那么 都回滚；
     
-    Propagation.NESTED: 内部事物是外部事物的一个子事物；
+    Propagation.NESTED: 内部事物是外部事物的一个子事物； 内部事物会受到外部事物的影响， 及时内部运行的时候没有异常，如果外部有异常也会导致内部回滚
+    
+    
+    
+    Propagation.REQUIRES_NEW 和 Propagation.NESTED 
+    当内部事物有异常的时候  如果外部不try catch , 外部，内部的时候都会回滚
+    当外部有异常的时候REQUIRES_NEW 的外部异常不会影响内部的事物； NESTED 如果外部有异常的时候，内部事物，外部都会进行回滚
+    
+    
+    
     
     
