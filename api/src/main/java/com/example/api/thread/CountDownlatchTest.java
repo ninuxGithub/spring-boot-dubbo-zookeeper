@@ -17,15 +17,23 @@ public class CountDownlatchTest {
                 @Override
                 public void run() {
                     try {
+                        System.out.println("开始复杂的计算"+ Thread.currentThread().getName());
                         latch.await();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    try {
+                        TimeUnit.SECONDS.sleep(2);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                     System.out.println("java");
                 }
             }).start();
+
             try {
-                TimeUnit.SECONDS.sleep(2000);
+                TimeUnit.SECONDS.sleep(200);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
