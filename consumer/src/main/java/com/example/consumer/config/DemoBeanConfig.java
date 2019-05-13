@@ -4,23 +4,32 @@ import com.example.consumer.bean.Person;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.PropertyValues;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessorAdapter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.lang.Nullable;
+
+import java.beans.PropertyDescriptor;
 
 /**
  * postProcessBeforInitialization  --->  afterPropertiesSet --> init --> postProcessAfterInitialization
- *
- *
+ * <p>
+ * <p>
  * bean加载：
  * 1.ClassPathBeanDefinitionScanner#registerBeanDefinition(BeanDefinitionHolder definitionHolder, BeanDefinitionRegistry registry)
  * 2.BeanDefinitionReaderUtils.registerBeanDefinition(BeanDefinitionHolder definitionHolder, BeanDefinitionRegistry registry)
  * 3.DefaultListableBeanFactory.registerBeanDefinition(String beanName, BeanDefinition beanDefinition)   将bean保存到beanDefinitionMap
- *
+ * <p>
  * 查看 org.springframework.context.support.AbstractApplicationContext#refresh()  bean的加载都在这方法里面
- *
  *
  * @author shenzm
  * @date 2019-2-22
@@ -28,8 +37,26 @@ import org.springframework.context.annotation.Configuration;
  */
 
 
+/***
+ * 实例化BeanFactoryPostProcessor实现类---postProcessBeanFactory()执行
+ * 实例化BeanPostProcessor实现类
+ * 实例化InstantiationAwareBeanPostProcessorAdaptor实现类
+ * 执行InstantiationAwareBeanPostProcessor--->postProcessBeforeInstantiation()-->postProcessPropertyValues()
+ * 调用BeanNameAware.setBeanName()
+ * 调用BeanFactoryAware.setBeanFactory()
+ * 执行BeanPostProcessor.postProcessBeforeInitialization()
+ * 调用InitializingBean.afterPropertySet()
+ * 调用@Bean的init-method
+ * 执行BeanPostProcessor.postProcessAfterInitialization()
+ * 执行InstantiationAwareBeanPostProcessor.postProcessAfterInitialization()
+ * 执行DisposibleBean.destory()
+ * 调用@Bean的destroy-method
+ *
+ */
+
+
 @Configuration
-public class DemoBeanConfig implements InitializingBean, BeanPostProcessor {
+public class DemoBeanConfig extends InstantiationAwareBeanPostProcessorAdapter implements BeanNameAware,BeanFactoryAware, InitializingBean, BeanPostProcessor, BeanFactoryPostProcessor {
 
     private static final Logger logger = LoggerFactory.getLogger(DemoBeanConfig.class);
 
@@ -38,6 +65,10 @@ public class DemoBeanConfig implements InitializingBean, BeanPostProcessor {
 
     @Value("${demo.name}")
     private String name;
+
+    private String beanName;
+
+    private BeanFactory beanFactory;
 
     @Bean(initMethod = "init", destroyMethod = "destory")
     public Person init() {
@@ -51,13 +82,42 @@ public class DemoBeanConfig implements InitializingBean, BeanPostProcessor {
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        //logger.info("postProcessBeforeInitialization  ===>  bean: {}  beanName :{}  " , bean, beanName );
+        logger.info("BeanPostProcessor.postProcessBeforeInitialization  ===>  bean: {}  beanName :{}  ", bean, beanName);
         return bean;
     }
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        //logger.info("postProcessAfterInitialization  ===>  bean: {}  beanName :{}  " , bean, beanName );
+        logger.info("BeanPostProcessor.postProcessAfterInitialization  ===>  bean: {}  beanName :{}  ", bean, beanName);
         return bean;
+    }
+
+    @Override
+    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+        logger.info("BeanFactoryPostProcessor.postProcessBeanFactory");
+    }
+
+    @Nullable
+    @Override
+    public Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {
+
+        return super.postProcessBeforeInstantiation(beanClass, beanName);
+    }
+
+    @Override
+    public PropertyValues postProcessPropertyValues(PropertyValues pvs, PropertyDescriptor[] pds, Object bean, String beanName) throws BeansException {
+        return super.postProcessPropertyValues(pvs, pds, bean, beanName);
+    }
+
+    @Override
+    public void setBeanName(String name) {
+        this.beanName = name;
+        logger.info("bean name :{}", name);
+    }
+
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        this.beanFactory = beanFactory;
+        logger.info("bean factory ");
     }
 }

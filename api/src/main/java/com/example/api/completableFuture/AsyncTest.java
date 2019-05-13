@@ -22,7 +22,6 @@ public class AsyncTest {
 
         testTheCompose(threadPoolExecutor);
 
-
     }
 
 

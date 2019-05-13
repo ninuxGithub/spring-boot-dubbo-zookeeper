@@ -183,7 +183,14 @@ class Demo{
     当内部事物有异常的时候  如果外部不try catch , 外部，内部的时候都会回滚
     当外部有异常的时候REQUIRES_NEW 的外部异常不会影响内部的事物； NESTED 如果外部有异常的时候，内部事物，外部都会进行回滚
     
+### docker
+    http://blog.chinaunix.net/uid-27174191-id-5753087.html
     
+    centos67.5 需要修改docker的文件才可以打开tcp
+    修改配置文件：/etc/sysconfig/docker 添加以下参数：    
+    other_args="-H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock"
+    
+      
     
     
     
