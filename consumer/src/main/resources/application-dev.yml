@@ -6,9 +6,10 @@ demo:
 spring:
   #######redis config##############
   redis:
-    sentinel:
-      master: mymaster
-      nodes: 10.1.51.230:26379,10.1.51.230:26380,10.1.51.230:26381
+#    如果没有开启哨兵项目启动不了
+#    sentinel:
+#      master: mymaster
+#      nodes: 10.1.51.230:26379,10.1.51.230:26380,10.1.51.230:26381
     password: redis
     database: 0
     jedis:
@@ -163,6 +164,7 @@ logging:
     com.example.consumer.mapper: debug
     org.apache.activemq: info
     org.springframework.jdbc: debug
+    org.springframework.cache: debug
 
 
 
