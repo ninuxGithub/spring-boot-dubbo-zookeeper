@@ -190,6 +190,100 @@ class Demo{
     修改配置文件：/etc/sysconfig/docker 添加以下参数：    
     other_args="-H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock"
     
+    
+### spring dubbo 启动分析
+    AbstractApplication.refresh()的时候
+    
+    
+    try {
+        // Allows post-processing of the bean factory in context subclasses.
+        postProcessBeanFactory(beanFactory);
+        
+        // Invoke factory processors registered as beans in the context.
+        invokeBeanFactoryPostProcessors(beanFactory);//DubboAutoConfiguration.serviceAnnotationBeanPostProcessor()
+
+        // Register bean processors that intercept bean creation.
+        registerBeanPostProcessors(beanFactory);//注册beanPostprocessor 扫描dubbo的@Service注解的bean
+
+        // Initialize message source for this context.
+        initMessageSource();
+
+        // Initialize event multicaster for this context.
+        initApplicationEventMulticaster();
+
+        // Initialize other special beans in specific context subclasses.
+        onRefresh();
+
+        // Check for listener beans and register them.
+        registerListeners();
+
+        // Instantiate all remaining (non-lazy-init) singletons.
+        finishBeanFactoryInitialization(beanFactory);
+
+        // Last step: publish corresponding event.
+        finishRefresh();//完成刷新的时候开始暴露服务 , publishEvent(new ContextRefreshedEvent(this));
+        
+    } catch (BeansException ex) {
+        if (logger.isWarnEnabled()) {
+            logger.warn("Exception encountered during context initialization - " +
+                    "cancelling refresh attempt: " + ex);
+        }
+
+        // Destroy already created singletons to avoid dangling resources.
+        destroyBeans();
+
+        // Reset 'active' flag.
+        cancelRefresh(ex);
+
+        // Propagate exception to caller.
+        throw ex;
+    } finally {
+        // Reset common introspection caches in Spring's core, since we
+        // might not ever need metadata for singleton beans anymore...
+        resetCommonCaches();
+    }
+    
+    
+    ServiceBean 继承了ServiceConfig 实现类SpringApplicationListener实现了onApplicationEvent方法--->export
+    实现类InitializingBean 实现了afterPropertiesSet方法 设置属性完毕后调用该方法
+    
+    ServiceConfig.doExportUrls 服务暴露的主要的方法
+    ServiceConfig.exportLocal 服务暴露到本地
+    protocol.export(wrapperInvoker); 服务暴露到远程
+        ProtocolListenerWrapper.export
+        ProtocolFilterWrapper.export qos 服务
+        RegistryProtocal.export 的时候注册服务到zookeeper  register(registryUrl, registedProviderUrl);
+            doLocalExport 调用DubboProtocol.export
+                server = Exchangers.bind(url, requestHandler); 启动netty 绑定服务 为远程调用做准备
+            
+    
+    centos控制台中连接qos  : telnet 10.1.51.96 33333 连接成功 可以使用ls  online offline 来显示 控制服务的上线和线性
+    参考了https://segmentfault.com/a/1190000014520742
+    
+    
+### jvm 参数
+    -verbose:gc -verbose:class -verbose:jni -Xms32m -Xmx64m
+    -verbose:gc 每次gc的情况
+    -verbose:class jvm载入类的信息
+    -verbose:jni jvm 调用jni的情况
+    
+    -Xms32m : 设置jvm的内存
+    -Xmx64m : 设置jvm的最大内存
+    
+    -XX:+PrintGC 打印每次GC的情况
+    -XX:+PrintGCDetails 打印每次GC的详细情况
+    
+    -XX:+UseParallelGC -XX:+UseParallelOldGC -XX:ParallelGCThreads=4 -XX:+UseAdaptiveSizePolicy -XX:MaxHeapSize=2147483648 -XX:MaxNewSize=1073741824 -XX:NewSize=1073741824 -XX:+PrintGCDetails -XX:+PrintTenuringDistribution -XX:+PrintGCTimeStamps
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
       
     
     
