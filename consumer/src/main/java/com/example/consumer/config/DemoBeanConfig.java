@@ -55,69 +55,70 @@ import java.beans.PropertyDescriptor;
  */
 
 
-@Configuration
-public class DemoBeanConfig extends InstantiationAwareBeanPostProcessorAdapter implements BeanNameAware,BeanFactoryAware, InitializingBean, BeanPostProcessor, BeanFactoryPostProcessor {
-
-    private static final Logger logger = LoggerFactory.getLogger(DemoBeanConfig.class);
-
-    @Value("${demo.age}")
-    private int age;
-
-    @Value("${demo.name}")
-    private String name;
-
-    private String beanName;
-
-    private BeanFactory beanFactory;
-
-    @Bean(initMethod = "init", destroyMethod = "destory")
-    public Person init() {
-        return new Person(name, age);
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        logger.info("set properties ===>  name: {}  age :{}  ", name, age);
-    }
-
-    @Override
-    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        logger.info("BeanPostProcessor.postProcessBeforeInitialization  ===>  bean: {}  beanName :{}  ", bean, beanName);
-        return bean;
-    }
-
-    @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        logger.info("BeanPostProcessor.postProcessAfterInitialization  ===>  bean: {}  beanName :{}  ", bean, beanName);
-        return bean;
-    }
-
-    @Override
-    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        logger.info("BeanFactoryPostProcessor.postProcessBeanFactory");
-    }
-
-    @Nullable
-    @Override
-    public Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {
-
-        return super.postProcessBeforeInstantiation(beanClass, beanName);
-    }
-
-    @Override
-    public PropertyValues postProcessPropertyValues(PropertyValues pvs, PropertyDescriptor[] pds, Object bean, String beanName) throws BeansException {
-        return super.postProcessPropertyValues(pvs, pds, bean, beanName);
-    }
-
-    @Override
-    public void setBeanName(String name) {
-        this.beanName = name;
-        logger.info("bean name :{}", name);
-    }
-
-    @Override
-    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-        this.beanFactory = beanFactory;
-        logger.info("bean factory ");
-    }
-}
+//系统启动的时候日志太多了注释掉
+//@Configuration
+//public class DemoBeanConfig extends InstantiationAwareBeanPostProcessorAdapter implements BeanNameAware,BeanFactoryAware, InitializingBean, BeanPostProcessor, BeanFactoryPostProcessor {
+//
+//    private static final Logger logger = LoggerFactory.getLogger(DemoBeanConfig.class);
+//
+//    @Value("${demo.age}")
+//    private int age;
+//
+//    @Value("${demo.name}")
+//    private String name;
+//
+//    private String beanName;
+//
+//    private BeanFactory beanFactory;
+//
+//    @Bean(initMethod = "init", destroyMethod = "destory")
+//    public Person init() {
+//        return new Person(name, age);
+//    }
+//
+//    @Override
+//    public void afterPropertiesSet() throws Exception {
+//        logger.info("set properties ===>  name: {}  age :{}  ", name, age);
+//    }
+//
+//    @Override
+//    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+//        logger.info("BeanPostProcessor.postProcessBeforeInitialization  ===>  bean: {}  beanName :{}  ", bean, beanName);
+//        return bean;
+//    }
+//
+//    @Override
+//    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+//        logger.info("BeanPostProcessor.postProcessAfterInitialization  ===>  bean: {}  beanName :{}  ", bean, beanName);
+//        return bean;
+//    }
+//
+//    @Override
+//    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+//        logger.info("BeanFactoryPostProcessor.postProcessBeanFactory");
+//    }
+//
+//    @Nullable
+//    @Override
+//    public Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {
+//
+//        return super.postProcessBeforeInstantiation(beanClass, beanName);
+//    }
+//
+//    @Override
+//    public PropertyValues postProcessPropertyValues(PropertyValues pvs, PropertyDescriptor[] pds, Object bean, String beanName) throws BeansException {
+//        return super.postProcessPropertyValues(pvs, pds, bean, beanName);
+//    }
+//
+//    @Override
+//    public void setBeanName(String name) {
+//        this.beanName = name;
+//        logger.info("bean name :{}", name);
+//    }
+//
+//    @Override
+//    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+//        this.beanFactory = beanFactory;
+//        logger.info("bean factory ");
+//    }
+//}
