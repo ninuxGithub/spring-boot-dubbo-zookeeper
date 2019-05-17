@@ -1,0 +1,18 @@
+
+server:
+  port: 9090
+
+
+spark:
+  spark-home: .
+  app-name: spartTest
+  master: local[4]
+
+
+logging:
+  level:
+    org.elasticsearch: info
+    org.springframework: info
+    org.springframework.data.elasticsearch.repository: info
+  file: log\spark-demo.log
+
