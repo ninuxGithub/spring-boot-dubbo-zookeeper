@@ -7,6 +7,7 @@
         <module>api</module>
         <module>consumer</module>
         <module>provider</module>
+        <module>spart-demo</module>
     </modules>
 
     <parent>

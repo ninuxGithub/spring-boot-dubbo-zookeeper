@@ -45,6 +45,8 @@ dubbo:
     address: 10.1.51.96:2181
 #    address: 10.1.51.96:2181,10.1.51.96:2182
     id: zookeeper-registry
+  provider:
+    loadbalance: consistenthash
 
 
 #  registries:

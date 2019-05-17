@@ -251,12 +251,47 @@ class Demo{
     ServiceConfig.exportLocal 服务暴露到本地
     protocol.export(wrapperInvoker); 服务暴露到远程
         ProtocolListenerWrapper.export
-        ProtocolFilterWrapper.export qos 服务
+        ProtocolFilterWrapper.export 
+        QosProtocolWrapper export  启动 qos 服务
         RegistryProtocal.export 的时候注册服务到zookeeper  register(registryUrl, registedProviderUrl);
-            doLocalExport 调用DubboProtocol.export
-                server = Exchangers.bind(url, requestHandler); 启动netty 绑定服务 为远程调用做准备
-            
+            doLocalExport 
+                DubboProtocol.export
+                    openServer-->createServer-->Exchangers.bind(url, requestHandler); 启动netty 绑定服务 为远程调用做准备
+            register(registryUrl, registedProviderUrl); 注册信息到zookeeper
+            registry.subscribe(overrideSubscribeUrl, overrideSubscribeListener);订阅服务 provider信息 
     
+    
+    dubbo 服务发现
+    ReferenceBean继承了ReferenceConfig 实现了InitaializationBean 当bean的属性设置的时候调用afterPropertiesSet
+    初始化consumer, application, module, registries,monitor--->ReferenceConfig.getObject() 
+    ReferenceConfig.getObject()-->get()-->init()--ref = createProxy(map);
+    referotocol.refer(interfaceClass, urls.get(0)); 最终会和服务注册一样的经过一系列的xxxWrapper
+    ...
+    在此过程中 会调用DubboProtocal的refer-->getClients-->AbstractClient的构造器-->doOpen() 开启netty客户端
+    
+    RegistryProtocol.refer
+        registryFactory.getRegistry(url) 方法通过注册工厂来获取注册器 （zookeeper）
+        doRefer 服务发现的业务
+            创建RegistryDirectory对象 设置注册器， 协议， 订阅服务；
+        
+    
+    loadbalance策略： 
+    AbstractLoadBalance 抽象类
+    RandomLoadBalance 随机策略
+    RoundRobinLoadBalance 轮询策略
+    LeastActiveLoadBalance 最少活跃的用户
+    ConsistentHashLoadBalance 一致哈希 让相同的provider的请求 请求同一个节点
+    
+    
+    dubbo 容错
+    failover cluster : 失败重试 （默认） 调用服务的提供者失败后切换服务的提供者重试
+    failfast cluster: 快速失败 立即报错 不重试
+    failsafe cluster: 调用服务提供者的时候 有异常忽略
+    forking cluster : 并行调用 调用多个服务提供方 只要有一个调用成功就返回
+    broadcast cluster : 广播调用 逐个调用服务提供方  任何一台调用失败 此次的调用就失败；
+    
+    
+    dubbo qos:
     centos控制台中连接qos  : telnet 10.1.51.96 33333 连接成功 可以使用ls  online offline 来显示 控制服务的上线和线性
     参考了https://segmentfault.com/a/1190000014520742
     
