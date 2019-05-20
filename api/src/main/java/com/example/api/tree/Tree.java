@@ -1,7 +1,8 @@
 package com.example.api.tree;
 
 import java.io.File;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * https://img-bbs.csdn.net/upload/201905/09/1557389576_325837.jpg
@@ -10,110 +11,152 @@ import java.util.Random;
  * @date 2019-5-17
  * @description 作用
  */
+
 public class Tree {
 
-    static Node root = null;
+    static Node treeRoot;
 
-    public int fxy(Node x, Node y) {
-        return 0;
+    static Map<Integer,List<Node>> map = new HashMap<>();
+
+
+    public static int fxy(Node x, Node y) {
+        return Node.getSum(x) + Node.getSum(y);
     }
 
     public static void main(String[] args) {
 
-//        File rf = new File("D:\\mobileDSNew");
-//        new Tree().listFile(rf, 0);
+        int deepth = 5;
+        int level=1;
+        buildTree(null, level, deepth);
+        System.out.println(treeRoot);
 
-        new Tree().buildTree(root, 0, 3);
+        List<Map.Entry<Integer, List<Node>>> entryList = new ArrayList<>(map.entrySet());
+        for (int i=0; i<entryList.size(); i++){
+            List<Node> nodes = entryList.get(i).getValue();
+            for (int j=0; j<nodes.size(); j++){
+                System.out.print(getSmbos("**", deepth - i) +nodes.get(j).getValue());
+            }
+            System.out.println("");
 
+        }
+        List<Node> nodeList = entryList.get(deepth - 1).getValue();
+        /*for (int i=0; i<nodeList.size(); i++){
+            System.out.println("第"+deepth+"排的第"+(i+1)+"列的元素到root的和为："+Node.getSum(nodeList.get(i)));
+        }*/
+
+        List<Node> max2List = nodeList.stream().sorted(new Comparator<Node>() {
+            @Override
+            public int compare(Node o1, Node o2) {
+                return Node.getSum(o1) - Node.getSum(o2);
+            }
+        }.reversed()).limit(2).collect(Collectors.toList());
+
+
+        for (int i=0; i<nodeList.size(); i++){
+            if (nodeList.get(i) == max2List.get(0) || nodeList.get(i) ==max2List.get(1)){
+                System.out.println("第"+deepth+"排的第"+(i+1)+"列的元素到root的和为："+Node.getSum(nodeList.get(i)));
+            }
+
+        }
 
     }
+
 
     /**
-     * 递归文件夹
-     *
-     * @param rf
-     * @param level
+     * @param root root 节点
+     * @param level 深度从第几层开始
+     * @param deepth 深度
      */
-    public void listFile(File rf, int level) {
-
-        for (File file : rf.listFiles()) {
-            if (file.isDirectory()) {
-                System.out.println("\t" + getSplitStr(level) + file.getName());
-                level++;
-                listFile(file, level);
-            } else {
-                System.out.println("\t" + getSplitStr(level) + file.getName());
-            }
-
+    public static void buildTree(Node root, int level, int deepth) {
+        if(level ==1 && root == null){
+            root = createLeafNodes(null);
+            root.setDeepth(deepth);
+            treeRoot = root;
+            initMap(root, level);
         }
-    }
-
-    private String getSplitStr(int h) {
-        String str = "";
-        for (int i = 0; i < h; i++) {
-            str += "---|";
+        level++;
+        if (level > deepth) {
+            return;
         }
-        return str;
+        root.setLeftLeaf(createLeafNodes(root));
+        initMap(root.getLeftLeaf(), level);
+        buildTree(root.getLeftLeaf(), level, deepth);
+
+        root.setRightLeaf(createLeafNodes(root));
+        initMap(root.getRightLeaf(), level);
+        buildTree(root.getRightLeaf(), level, deepth);
     }
 
-    public void buildTree(Node root, int level, int deepth) {
-        System.out.println("-->build");
-        if (root == null) {
-            root = createRootNodes();
-            System.out.println(root);
-            buildTree(root, level, deepth);
-        } else {
-            level++;
-            if (level >= deepth) {
-                return;
-            }
-            System.out.println(root);
-            root.setRightLeaf(createLeafNodes());
-            buildTree(root.getLeftLeaf(), level, deepth);
-
-            root.setRightLeaf(createLeafNodes());
-            buildTree(root.getRightLeaf(), level, deepth);
+    private static void initMap(Node root, int level) {
+        List<Node> list = map.get(level);
+        if (null == list){
+            list = new ArrayList<>();
         }
-
+        list.add(root);
+        map.put(level, list);
     }
 
-    public Node createRootNodes() {
-        return new Node(getRandomNum(), new Node(getRandomNum()), new Node(getRandomNum()));
+    private static String getSmbos(String smbo , int deepth){
+        String s = "";
+        for (int i=0; i<deepth; i++){
+            s += smbo;
+        }
+        return s;
     }
 
-    public Node createLeafNodes() {
-        return new Node(getRandomNum());
+
+    public static Node createLeafNodes(Node parent) {
+        return new Node(getRandomNum(), parent);
     }
 
 
-    private int getRandomNum() {
+    private static int getRandomNum() {
         Random random = new Random();
-        int num = random.nextInt(1000);
+        int num = random.nextInt(20);
         return num;
     }
 
 
-    class Node {
+    static class Node {
         int value;
+
+        int deepth;
 
         Node leftLeaf;
 
         Node rightLeaf;
 
-        public Node(int value) {
+        Node parent;
+
+        public Node(int value, Node parent) {
             this.value = value;
+            this.parent = parent;
         }
 
-        public Node(int value, Node leftLeaf, Node rightLeaf) {
+        public Node(int value, Node leftLeaf, Node rightLeaf, Node parent) {
             this.value = value;
             this.leftLeaf = leftLeaf;
             this.rightLeaf = rightLeaf;
+            this.parent = parent;
         }
 
-        /*public Node[] getChildNodes() {
-            return new Node[]{leftLeaf, rightLeaf};
-        }*/
+        public static int getSum(Node node){
+            int sum = node.getValue();
+            Node p = node.getParent();
+            while (p !=null){
+                sum += p.getValue();
+                p = p.getParent();
+            }
 
+            return sum;
+        }
+        public int getDeepth() {
+            return deepth;
+        }
+
+        public void setDeepth(int deepth) {
+            this.deepth = deepth;
+        }
 
         public int getValue() {
             return value;
@@ -139,12 +182,19 @@ public class Tree {
             this.rightLeaf = rightLeaf;
         }
 
+        public Node getParent() {
+            return parent;
+        }
+
+        public void setParent(Node parent) {
+            this.parent = parent;
+        }
+
         @Override
         public String toString() {
             return "Node{" +
                     "value=" + value +
-                    ", leftLeaf=" + leftLeaf +
-                    ", rightLeaf=" + rightLeaf +
+                    ", parent=" + (parent == null ? "root" : parent.getValue()) +
                     '}';
         }
     }
