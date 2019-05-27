@@ -54,9 +54,29 @@ public class UserAImpl implements UserA {
         UserNew user = new UserNew();
         user.setName("bbbbbbbbbb");
         user.setAge(222);
-//        userB.testRequiresNew(user);
-        userB.testNested(user);
-        throw new RuntimeException("service A 异常");
+
+        //requires_new 如果内部的事物抛出了异常不try那么都会回滚
+        //如果在调用的地方进行了try 那么内部的事物异常后回滚 外部的事物正常提交
+        try {
+            userB.testRequiresNew(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //如果外部抛出了异常 不会对内部的事物造成影响
+        //throw new RuntimeException("service A 异常");
+
+
+//        2.如果采用try nested 那么嵌套事物有异常被捕捉了 内部事物提交失败 导致 roll back to savepoint
+//        try {
+//            userB.testNested(user);//内部抛出了异常
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        3.如果不采取try语句， 那么抛出的异常会被外层事物捕捉到 导致外层的事物也回滚
+//        userB.testNested(user);//内部抛出了异常
+//        4.如果外层直接抛出异常，那么所有的提交都会进行回滚
+//        throw new RuntimeException("service A 异常");
     }
 
 

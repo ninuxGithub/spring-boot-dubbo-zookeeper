@@ -31,7 +31,7 @@ public class UserBImpl implements UserB {
     @Override
     public void testRequiresNew(UserNew user) {
         userPersistService.save(user);
-        throw new RuntimeException("service B exception");
+        //throw new RuntimeException("service B exception");
     }
 
     @Transactional(
@@ -42,7 +42,7 @@ public class UserBImpl implements UserB {
     @Override
     public void testNested(UserNew user) {
         userPersistService.save(user);
-        //throw new RuntimeException("service B exception");
+        throw new RuntimeException("service B exception");
     }
 
 }
