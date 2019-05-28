@@ -62,3 +62,12 @@
     消息广播的方式  分发给每个订阅者， 订阅者获取的消息的数量是相同的；
     
     
+## 项目的demo
+    http://localhost:9091/publish/queue
+    消费端发送消息给provier 通过QueueListener进行了消息的消费 并且会通过sendTo回复一个消息给consumer
+    
+    
+    http://localhost:9091/publish/topic    
+    consumer发送一个消息个provider 通过TopicListener进行了消息的消费， 分发给a,b 2个topic    
+    
+    

@@ -23,7 +23,7 @@ public class PublishController {
     @Autowired
     private Topic topic;
 
-    @RequestMapping("/queue")
+    @RequestMapping(value = "/queue",produces ="application/json;charset=UTF-8" )
     public String queue() {
 
         for (int i = 0; i < 2; i++) {
@@ -38,7 +38,7 @@ public class PublishController {
         System.out.println(msg);
     }
 
-    @RequestMapping("/topic")
+    @RequestMapping(value = "/topic",produces = "application/json;charset=UTF-8")
     public String topic() {
 
         for (int i = 0; i < 2; i++) {
