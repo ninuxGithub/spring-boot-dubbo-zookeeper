@@ -84,6 +84,14 @@ function main()
 
 
 
+    local type_config = {
+        selfSelect = "xwzx,report,gsgg"
+    }
+
+    print(type_config['selfSelect'])
+
+
+
 end
 
 function testFunc(tab, func)
