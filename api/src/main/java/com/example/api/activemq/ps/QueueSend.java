@@ -1,19 +1,23 @@
-package com.example.api.activemq;
+package com.example.api.activemq.ps;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 
 import javax.jms.*;
-import java.io.IOException;
+import java.util.HashMap;
 
 /**
+ *
+ * auto 自动
+ * client 客户端签收
+ * dups_ok 不必必须签收  会重复发送
  * @author shenzm
  * @date 2019-2-27
  * @description 作用
  */
-public class ActivemqTestTopicSend {
+public class QueueSend {
 
     public static void main(String[] args) throws InterruptedException {
-        ActivemqTestTopicSend test = new ActivemqTestTopicSend();
+        QueueSend test = new QueueSend();
         try {
             test.produce();
         } catch (JMSException e) {
@@ -26,17 +30,18 @@ public class ActivemqTestTopicSend {
         Connection connection = activeMQConnectionFactory.createConnection();
         connection.start();
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        Topic topic = session.createTopic("test.topic");
-        MessageProducer producer = session.createProducer(topic);
+        Queue queue = session.createQueue("test-queue");
+        MessageProducer producer = session.createProducer(queue);
+        for (int i = 0; i < 10; i++) {
+            //创建MapMessage
+            MapMessage message = session.createMapMessage();
+            message.setString("java", "doc");
+            message.setObject("key", new HashMap<String, String>() {{
+                put("java", "doc");
+            }});
 
-
-        //持久化的topic 启动的需要挪动到后面去
-        //producer.setDeliveryMode(DeliveryMode.PERSISTENT);
-        //connection.start();
-        connection.setClientID("producer-id");
-
-        for(int i=0; i<10; i++){
-            TextMessage message = session.createTextMessage("hello ActiveMQ topic " + i);
+            //设置属性
+            message.setStringProperty("extra","test-message-type");
             producer.send(message);
         }
         producer.close();

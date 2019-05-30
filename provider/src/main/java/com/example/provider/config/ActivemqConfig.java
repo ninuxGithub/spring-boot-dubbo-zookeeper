@@ -4,6 +4,7 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.RedeliveryPolicy;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.activemq.command.ActiveMQTopic;
+import org.apache.activemq.pool.PooledConnectionFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -68,7 +69,7 @@ public class ActivemqConfig {
         return policy;
     }
 
-    @Bean
+   /* @Bean
     public ActiveMQConnectionFactory connectionFactory() {
         ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(userName, password, brokerUrl);
         connectionFactory.setRedeliveryPolicy(redeliveryPolicy());
@@ -105,6 +106,51 @@ public class ActivemqConfig {
 //    INDIVIDUAL_ACKNOWLEDGE = 4：单条消息确认
     @Bean
     public JmsListenerContainerFactory<?> jmsListenerContainerTopic(ActiveMQConnectionFactory connectionFactory){
+        DefaultJmsListenerContainerFactory bean = new DefaultJmsListenerContainerFactory();
+        //设置为发布订阅方式, 默认情况下使用的生产消费者方式
+        bean.setPubSubDomain(true);
+        bean.setConnectionFactory(connectionFactory);
+        bean.setRecoveryInterval(1000L);
+        return bean;
+    }*/
+
+
+
+   //PooledConnectionFactory  要比ActiveMQConnectionFactory更好 可以缓存mq连接
+
+
+    @Bean
+    public PooledConnectionFactory connectionFactory() {
+        ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory(userName, password, brokerUrl);
+        activeMQConnectionFactory.setRedeliveryPolicy(redeliveryPolicy());
+        PooledConnectionFactory pooledConnectionFactory = new PooledConnectionFactory(activeMQConnectionFactory);
+        pooledConnectionFactory.setMaxConnections(100);
+        return pooledConnectionFactory;
+    }
+
+    public JmsTemplate jmsTemplate(PooledConnectionFactory connectionFactory, Queue queue){
+        JmsTemplate jmsTemplate = new JmsTemplate();
+        //1 非持久化； 2 持久化
+        jmsTemplate.setDeliveryMode(2);
+        jmsTemplate.setConnectionFactory(connectionFactory);
+        jmsTemplate.setDefaultDestination(queue);
+        //客户端签收
+        jmsTemplate.setSessionAcknowledgeMode(4);
+        return jmsTemplate;
+    }
+
+    @Bean
+    public JmsListenerContainerFactory<?> jmsListenerContainerQueue(PooledConnectionFactory connectionFactory){
+        DefaultJmsListenerContainerFactory bean = new DefaultJmsListenerContainerFactory();
+        bean.setConnectionFactory(connectionFactory);
+        bean.setSessionAcknowledgeMode(4);
+        bean.setConcurrency("1-10");
+        bean.setRecoveryInterval(1000L);
+        return bean;
+    }
+
+    @Bean
+    public JmsListenerContainerFactory<?> jmsListenerContainerTopic(PooledConnectionFactory connectionFactory){
         DefaultJmsListenerContainerFactory bean = new DefaultJmsListenerContainerFactory();
         //设置为发布订阅方式, 默认情况下使用的生产消费者方式
         bean.setPubSubDomain(true);
