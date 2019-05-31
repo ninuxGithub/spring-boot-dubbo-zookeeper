@@ -26,7 +26,9 @@ public class QueueSend {
     }
 
     public void produce() throws JMSException {
-        ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory("admin", "admin", "tcp://10.1.51.96:61616");
+        //randomize 轮流的连接地址
+        String brokerUrl = "failover:(tcp://10.1.51.96:61616,tcp://10.1.51.240:61616)?randomize=true";
+        ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory("admin", "admin", brokerUrl);
         Connection connection = activeMQConnectionFactory.createConnection();
         connection.start();
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);

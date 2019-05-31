@@ -58,8 +58,22 @@
     假如有1个生成者生产了10条消息， 有2个消费者， 那么每个消费者个消费  5条消息； （轮询）
     
 ## activemq   topic 模式
-    
     消息广播的方式  分发给每个订阅者， 订阅者获取的消息的数量是相同的；
+    
+
+## activemq 
+    client-broker , broker-borker
+    
+    
+    openwire  tcp 默认的端口61616 数据传输之前需要序列化
+    ssl
+    stomp
+    xmpp
+    
+    2019-5-31 16:03:00 11c
+    12c 容错连接 failover 连接机制
+   
+    
     
     
 ## 项目的demo

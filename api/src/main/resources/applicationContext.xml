@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+    <!--扫描包-->
+    <context:component-scan base-package="com.example.api.spring"/>
+
+    <!--启用cglib代理-->
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+
+    <!--声明一个pooledConnectionFactory 可以缓存mq的连接-->
+    <bean id="pooledConnectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory" destroy-method="stop">
+        <property name="connectionFactory">
+            <bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+                <property name="brokerURL">
+                    <value>tcp://10.1.51.96:61616</value>
+                </property>
+            </bean>
+        </property>
+        <!--缓存的最大的连接数的大小-->
+        <property name="maxConnections" value="100"/>
+    </bean>
+
+    <!--默认的队列-->
+    <bean id="destination" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg index="0" value="spring-queue"/>
+    </bean>
+
+    <!--jms模板-->
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <property name="connectionFactory" ref="pooledConnectionFactory"/>
+        <property name="defaultDestination" ref="destination"/>
+        <property name="messageConverter">
+            <bean class="org.springframework.jms.support.converter.SimpleMessageConverter"/>
+        </property>
+    </bean>
+
+    <!--消息的消费的监听-->
+    <bean id="messageListener" class="com.example.api.spring.activemq.MyMessageListener"/>
+
+    <!--默认的消息监听容器-->
+    <bean id="defaultMessageListenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="pooledConnectionFactory"/>
+        <property name="destination" ref="destination"/>
+        <property name="messageListener" ref="messageListener"/>
+    </bean>
+</beans>
