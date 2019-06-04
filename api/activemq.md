@@ -72,7 +72,23 @@
     
     2019-5-31 16:03:00 11c
     12c 容错连接 failover 连接机制
+    13c
    
+    2019-6-3 08:39:51
+    14c  15c  destination  : wildcard  virsual mirrored-queue
+    
+    cursors的类型
+    Store-based
+    VM
+    file-based
+    
+    
+    jms.useAsyncSend=true
+    cf.setUseAsyncSend(true);
+    
+    consumer优先等级： 0~4 普通  5~9加急
+    activemq优先等级：0~127
+    c21 : exclusive consumer : 创建队列的时候采用“quname?consumer.exclusive=true&consumer.priority=10”
     
     
     
