@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author shenzm
@@ -24,12 +26,38 @@ import java.util.Map;
 @RestController
 public class RedisTestController {
 
+    ScheduledExecutorService executorService = Executors.newScheduledThreadPool(5);
+
+
+    private static ThreadLocal<SimpleDateFormat> localDateFormat = new ThreadLocal<SimpleDateFormat>() {
+        @Override
+        protected SimpleDateFormat initialValue() {
+            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
+        }
+    };
+
     @Autowired
     private RedisUtil redisUtil;
 
     @RequestMapping(value = "/testRedis")
     public String testRedis(@RequestParam("value") String value){
         redisUtil.set("java",value);
+        executorService.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                redisUtil.rpush("list", localDateFormat.get().format(new Date()));
+            }
+        }, 2, 3, TimeUnit.SECONDS);
+
+
+        executorService.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                String value = redisUtil.lpop("list");
+                System.out.println(value);
+            }
+        }, 2, 3, TimeUnit.SECONDS);
+
         return "ok";
     }
 }

@@ -28,6 +28,29 @@ import redis.clients.jedis.ShardedJedisPool;
  * 
  * 基于spring和redis的redisTemplate工具类 针对所有的hash 都是以h开头的方法 针对所有的Set 都是以s开头的方法 不含通用方法
  * 针对所有的List 都是以l开头的方法
+ *
+ *
+ * lpush : 将一个值插入到队列的头部
+ * rpush: 将一个值插入到队列的尾部
+ * lpop: 从队列的头部获取一个值
+ * rpop: 从队列的尾部获取一个值
+ *
+ * rdb : 生成一个dump文件 会在一定的时间进行快照的保存 ； 缺点：宕机丢失部分数据
+ * aof :
+ * 	appendfsync:
+ * 		always: 最安全的方式 每次执行redis命令都会讲aof缓存区的命令写到redis aof
+ * 		everysec: 每秒执行一次 ， 将缓存区的命令 刷到内存
+ * 		no: 系统决定什么时候进行保存
+ *
+ *
+ * 	键淘汰的策略
+ * 	noevication
+ * 	allkey-lru: 所有的键进行最近最少使用的淘汰
+ * 	allkey-random: 所有的键 随机淘汰
+ * 	volatile-random: 有过期时间的键进行随机淘汰
+ * 	volatile-lru:对有过期时间的键进行最近最少使用的淘汰
+ * 	volatile-ttl: 有过期时间的进行  过期淘汰
+ *
  */
 
 @Component
@@ -586,7 +609,6 @@ public class RedisUtil {
 	 *            键
 	 * @param value
 	 *            值
-	 * @param time
 	 *            时间(秒)
 	 * @return
 	 */
@@ -630,7 +652,6 @@ public class RedisUtil {
 	 *            键
 	 * @param value
 	 *            值
-	 * @param time
 	 *            时间(秒)
 	 * @return
 	 */
