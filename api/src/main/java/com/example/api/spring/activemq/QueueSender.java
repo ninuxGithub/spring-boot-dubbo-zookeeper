@@ -11,6 +11,11 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
 import javax.jms.TextMessage;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 /**
  * @author shenzm
@@ -32,7 +37,43 @@ public class QueueSender {
             @Override
             public Message createMessage(Session session) throws JMSException {
                 TextMessage message = session.createTextMessage();
-                message.setText("java");
+
+                CompletableFuture<String> future = CompletableFuture.supplyAsync(new Supplier<String>() {
+
+                    @Override
+                    public String get() {
+                        try {
+                            TimeUnit.SECONDS.sleep(3);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        return "hello";
+                    }
+                }).thenCombine(CompletableFuture.supplyAsync(new Supplier<String>() {
+                    @Override
+                    public String get() {
+                        try {
+                            TimeUnit.SECONDS.sleep(3);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        return "world";
+                    }
+                }), new BiFunction<String, String, String>() {
+
+                    @Override
+                    public String apply(String s, String s2) {
+                        return s + "  -- " + s2;
+                    }
+                });
+
+                try {
+                    message.setText(future.get());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
                 return message;
             }
         });
