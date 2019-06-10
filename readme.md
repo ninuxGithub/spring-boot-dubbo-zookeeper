@@ -311,9 +311,13 @@ class Demo{
     -XX:+UseParallelGC -XX:+UseParallelOldGC -XX:ParallelGCThreads=4 -XX:+UseAdaptiveSizePolicy -XX:MaxHeapSize=2147483648 -XX:MaxNewSize=1073741824 -XX:NewSize=1073741824 -XX:+PrintGCDetails -XX:+PrintTenuringDistribution -XX:+PrintGCTimeStamps
     
 
-    
-    
-    
+### 设置chrome 为默认的浏览器   
+    1、开始→运行→输入regedit，打开注册表编辑器
+    2、找到HKEY_CLASSES_ROOT\http\shell\open\command，在右边的窗口中双击"默认"，将要用浏览器的可执行文件的完全路径输入到这里，
+    例如设置IE为默认浏览器：输入“C:\Program Files\Internet Explorer\iexplore.exe”
+    3、然后找到 HKEY_CLASSES_ROOT\http\shell\open\ddeexec\Application，在右边的窗口中双击"默认"，设置浏览器名，
+    如果是Firefox则输入Firefox，如果是IE则输入IExplore。（小提示：切记不能写错名称，如果你不知道浏览器的标准名称是什么，
+    只需要到安装目录下查看该浏览器的名称即可）
     
     
     
