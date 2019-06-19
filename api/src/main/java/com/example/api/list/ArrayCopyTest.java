@@ -1,6 +1,9 @@
 package com.example.api.list;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author shenzm
@@ -17,5 +20,20 @@ public class ArrayCopyTest {
         System.arraycopy(arr,1,arrNew,2,4);
 
         System.out.println(Arrays.toString(arrNew));
+
+
+        Set<Integer> set = new HashSet<>();
+        set.add(1);
+        set.add(3);
+        set.add(2);
+        set.add(null);
+
+        Integer[] array = new Integer[3];
+        set.toArray(array);
+        System.out.println(Arrays.toString(array));
+
+
+        //Optional.ofNullable(set.)
+
     }
 }
