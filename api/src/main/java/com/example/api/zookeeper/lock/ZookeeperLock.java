@@ -13,6 +13,15 @@ import java.util.stream.Collectors;
 
 
 /**
+ *
+ * 思路：如果当前的线程获取的节点的序号是最小的，那么说明获取到了锁， 获取到锁的线程执行业务代码后 删除锁对应的Znode
+ *
+ * 如果没有获取到锁，说明当前创建的临时节点的序号不是最小， 那么当前的节点需要去监听前一个序号的节点是否被删除了
+ *
+ * 如果当前节点的前一个节点Znode被删除了那么当前节点就可以获取锁
+ *
+ * 利用了Zookeeper subscribeDataChange事件, 里面有数据改变和节点被删除事件； 利用监听事件来判断前一个节点是否被删除
+ *
  * https://www.cnblogs.com/zwgblog/p/6972531.html  zookeeper 权限
  *
  * @author shenzm
