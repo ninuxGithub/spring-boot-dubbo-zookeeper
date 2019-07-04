@@ -1,4 +1,4 @@
-package com.example.api.namedservice;
+package com.example.api.zookeeper.namedservice;
 
 import org.I0Itec.zkclient.ZkClient;
 import org.I0Itec.zkclient.exception.ZkNoNodeException;

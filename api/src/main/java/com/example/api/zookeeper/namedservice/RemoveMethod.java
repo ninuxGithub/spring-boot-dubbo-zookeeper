@@ -1,4 +1,4 @@
-package com.example.api.namedservice;
+package com.example.api.zookeeper.namedservice;
 
 /**
  * @author shenzm

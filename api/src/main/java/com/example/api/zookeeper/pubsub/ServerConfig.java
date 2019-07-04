@@ -1,4 +1,4 @@
-package com.example.api.pubsub;
+package com.example.api.zookeeper.pubsub;
 
 /**
  * @author shenzm

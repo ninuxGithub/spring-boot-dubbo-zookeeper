@@ -1,4 +1,4 @@
-package com.example.api.pubsub;
+package com.example.api.zookeeper.pubsub;
 
 import com.alibaba.fastjson.JSON;
 import org.I0Itec.zkclient.IZkChildListener;

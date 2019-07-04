@@ -1,4 +1,4 @@
-package com.example.api.pubsub;
+package com.example.api.zookeeper.pubsub;
 
 import org.I0Itec.zkclient.ZkClient;
 import org.I0Itec.zkclient.serialize.BytesPushThroughSerializer;

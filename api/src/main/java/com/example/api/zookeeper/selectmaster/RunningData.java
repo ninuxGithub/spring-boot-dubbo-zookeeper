@@ -1,4 +1,4 @@
-package com.example.api.selectmaster;
+package com.example.api.zookeeper.selectmaster;
 
 import java.io.Serializable;
 

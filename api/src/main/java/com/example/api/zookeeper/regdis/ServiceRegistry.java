@@ -1,4 +1,4 @@
-package com.example.api.regdis;
+package com.example.api.zookeeper.regdis;
 
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.data.Stat;

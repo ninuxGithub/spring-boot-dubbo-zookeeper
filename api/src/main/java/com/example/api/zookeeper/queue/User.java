@@ -1,4 +1,4 @@
-package com.example.api.queue;
+package com.example.api.zookeeper.queue;
 
 import java.io.Serializable;
 

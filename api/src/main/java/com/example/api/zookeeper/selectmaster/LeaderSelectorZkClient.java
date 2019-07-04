@@ -1,4 +1,4 @@
-package com.example.api.selectmaster;
+package com.example.api.zookeeper.selectmaster;
 
 import org.I0Itec.zkclient.ZkClient;
 import org.I0Itec.zkclient.serialize.SerializableSerializer;

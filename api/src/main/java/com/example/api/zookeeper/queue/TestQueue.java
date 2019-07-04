@@ -1,4 +1,4 @@
-package com.example.api.queue;
+package com.example.api.zookeeper.queue;
 
 import org.I0Itec.zkclient.ZkClient;
 import org.I0Itec.zkclient.serialize.SerializableSerializer;
