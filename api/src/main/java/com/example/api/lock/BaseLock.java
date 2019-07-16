@@ -28,11 +28,11 @@ public class BaseLock {
     public BaseLock(ZkClient zkClient, String basePath, String lockName, String clientName) {
         this.zkClient = zkClient;
         this.basePath = basePath;
+        if (!zkClient.exists(this.basePath)) {
+            zkClient.createPersistent(this.basePath);
+        }
         this.clientName = clientName;
         this.path = basePath.concat("/").concat(lockName);
-        if (!zkClient.exists(basePath)) {
-            zkClient.createEphemeral(basePath);
-        }
         this.lockName = lockName;
     }
 
