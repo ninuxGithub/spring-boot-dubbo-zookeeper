@@ -15,4 +15,5 @@ logging:
     org.springframework: info
     org.springframework.data.elasticsearch.repository: info
   file: log\spark-demo.log
+  config: classpath:logback.xml
 

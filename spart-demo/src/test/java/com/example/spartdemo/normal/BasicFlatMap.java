@@ -15,12 +15,6 @@ import java.util.Map.Entry;
 public class BasicFlatMap {
     public static void main(String[] args) throws Exception {
 
-//        if (args.length != 2) {
-//            throw new Exception("Usage BasicFlatMap sparkMaster inputFile");
-//        }
-//
-//        args = {"local","D:\\dev\\workspace-sts-3.9.0.RELEASE\\spring-boot-dubbo-zookeeper\\spart-demo\\src\\main\\resources\\application-dev.yml"};
-
         JavaSparkContext sc = new JavaSparkContext(
                 "local", "basicflatmap", System.getenv("SPARK_HOME"), System.getenv("JARS"));
         JavaRDD<String> rdd = sc.textFile("D:\\dev\\workspace-sts-3.9.0.RELEASE\\spring-boot-dubbo-zookeeper\\spart-demo\\src\\main\\resources\\application-dev.yml");

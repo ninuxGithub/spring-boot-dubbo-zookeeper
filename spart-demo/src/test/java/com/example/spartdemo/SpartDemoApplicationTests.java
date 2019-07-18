@@ -65,7 +65,8 @@ public class SpartDemoApplicationTests {
             System.out.println("-------------------------------------------------------");
             System.out.println(sorted.count());
 
-            List<Tuple2<String, Integer>> output = sorted.top(10);
+            //List<Tuple2<String, Integer>> output = sorted.top(2);
+            List<Tuple2<String, Integer>> output = sorted.collect();
 
             for (Tuple2<String, Integer> tuple : output) {
                 result.put(tuple._1(), tuple._2());
