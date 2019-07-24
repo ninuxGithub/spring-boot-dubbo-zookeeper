@@ -51,7 +51,7 @@ public class SparkService implements Serializable {
 
             List<Tuple2<String, Integer>> output = sorted.collect();
 
-            sorted.top(10);
+//            sorted.top(10);
 
             for (Tuple2<String, Integer> tuple : output) {
                 result.put(tuple._1(), tuple._2());

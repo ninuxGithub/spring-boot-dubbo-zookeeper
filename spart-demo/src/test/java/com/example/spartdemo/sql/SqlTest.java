@@ -97,6 +97,9 @@ public class SqlTest {
         Dataset<Row> result = spark.sql("select * from global_temp.person2");
         result.map((MapFunction<Row,String>) row -> row.getAs("name"),Encoders.STRING()).show();
 
+        result.map((MapFunction<Row,String>) row -> row.getAs("name"),Encoders.STRING())
+                .javaRDD().saveAsObjectFile("spart-demo/src/main/resources/aaa.txt");
+
     }
 
     private static void beanDataFrame(SparkSession spark) {

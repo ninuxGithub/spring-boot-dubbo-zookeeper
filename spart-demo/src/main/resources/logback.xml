@@ -134,12 +134,12 @@
 
     <!-- Logger 根目录 -->
     <root level="DEBUG">
-        <!--<appender-ref ref="DEBUG"/>
+        <appender-ref ref="DEBUG"/>
         <appender-ref ref="ERROR"/>
         <appender-ref ref="WARN"/>
         <appender-ref ref="INFO"/>
         <appender-ref ref="TRACE"/>
-        <appender-ref ref="STDOUT"/>-->
+        <appender-ref ref="STDOUT"/>
     </root>
     <!--<root level="ERROR">
         <appender-ref ref="STDOUT"/>

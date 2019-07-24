@@ -18,7 +18,7 @@ spring:
         max-wait: -1
         max-idle: 8
         min-idle: 0
-    timeout: 6000
+    #timeout: 6000
     host: 10.1.51.96
     port: 6379
 
