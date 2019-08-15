@@ -1,0 +1,28 @@
+spring:
+  kafka:
+    listener:
+      poll-timeout: 1500
+      concurrency: 10
+      batch-listener: true
+    template:
+      default-topic: monitor-data
+    producer:
+      bootstrap-servers: 10.1.51.240:9092
+      key-serializer:  org.apache.kafka.common.serialization.StringDeserializer
+      value-serializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        sasl.mechanism: PLAIN
+        security.protocol: SASL_PLAINTEXT
+    consumer:
+      bootstrap-servers: 10.1.51.240:9092
+        key-serializer:  org.apache.kafka.common.serialization.StringDeserializer
+        value-serializer: org.apache.kafka.common.serialization.StringDeserializer
+        properties:
+          sasl.mechanism: PLAIN
+          security.protocol: SASL_PLAINTEXT
+        auto:
+          offset:
+            reset: latest
+        enable:
+          auto:
+            commit: true

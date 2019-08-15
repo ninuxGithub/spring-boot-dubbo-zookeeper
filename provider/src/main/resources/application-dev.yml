@@ -23,6 +23,35 @@ spring:
       repositories:
         enabled: true
 
+  kafka:
+    listener:
+      poll-timeout: 1500
+      concurrency: 10
+      batch-listener: true
+    template:
+      default-topic: monitor-data
+    producer:
+      bootstrap-servers: 10.1.51.240:9092
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      properties:
+        sasl.mechanism: PLAIN
+        security.protocol: SASL_PLAINTEXT
+    consumer:
+      group-id: group-2
+      bootstrap-servers: 10.1.51.240:9092
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        sasl.mechanism: PLAIN
+        security.protocol: SASL_PLAINTEXT
+      auto:
+        offset:
+          reset: latest
+      enable:
+        auto:
+          commit: true
+
 server:
   port: 9090
 
@@ -42,7 +71,7 @@ dubbo:
     status: server
   registry:
     protocol: zookeeper
-    address: 10.1.51.96:2181
+    address: 10.1.51.240:2181
 #    address: 10.1.51.96:2181,10.1.51.96:2182
     id: zookeeper-registry
   provider:
@@ -63,7 +92,7 @@ dubbo:
 motan:
   registry:
     regProtocol: zookeeper
-    address: 10.1.51.96:2181
+    address: 10.1.51.240:2181
     requestTimeout: 1000
     connectTimeout: 3000
   protocol:

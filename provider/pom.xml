@@ -20,7 +20,6 @@
     </properties>
 
     <dependencies>
-
         <dependency>
             <groupId>com.example</groupId>
             <artifactId>api</artifactId>
@@ -163,6 +162,12 @@
             <artifactId>motan-protocol-yar</artifactId>
             <version>${motan.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+
 
     </dependencies>
 
