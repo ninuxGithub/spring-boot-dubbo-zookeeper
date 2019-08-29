@@ -40,16 +40,17 @@ public class LRUHashMap<K, V> extends LinkedHashMap<K, V> implements Map<K, V> {
      */
     public static void main(String[] args) {
         Map<Integer, String> map = new LRUHashMap(16, 0.75f, true, 20);
-        for (int i = 0; i < 30; i++) {
+        for (int i = 10; i < 50; i++) {
             map.put(i, "java" + i);
 
             //如果加入这样代码  ， 使用一下这个元素 ，那么就不会被淘汰 否则  旧的值被淘汰
             //map.get(5);
+            System.out.println(map);
         }
 
         System.out.println(map.size());
         System.out.println(map.get(5));
-        System.out.println(map.get(22));
+        System.out.println(map.get(30));//将该元素调整到最后去
         System.out.println(map);
 
     }
