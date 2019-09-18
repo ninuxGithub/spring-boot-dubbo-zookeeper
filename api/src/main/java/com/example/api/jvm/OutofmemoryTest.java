@@ -35,6 +35,13 @@ import java.util.concurrent.TimeUnit;
  *
  *  所有的线程结束后  程序退出
  *
+ *
+ *
+ * java visual vm 建立远程连接
+ * 命令： jstatd -J-Djava.security.policy=jstatd.all.policy -J-Djava.rmi.server.hostname=10.1.51.240
+ * https://blog.csdn.net/zhou6343178/article/details/71534726
+ *
+ *
  * @author shenzm
  * @date 2019-4-30
  * @description 作用
