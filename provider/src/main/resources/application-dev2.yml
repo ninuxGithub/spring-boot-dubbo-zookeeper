@@ -53,7 +53,7 @@ spring:
           commit: true
 
 server:
-  port: 9090
+  port: 9080
 
 dubbo:
   scan:
@@ -62,31 +62,20 @@ dubbo:
     id: dubbo-provider
     name: dubbo-provider
     qos-enable: true
-    qos-port: 33333
+    qos-port: 33332
     qos-accept-foreign-ip: true
   protocol:
     id: dubbo
     name: dubbo
-    port: 20882
+    port: 20881
     status: server
   registry:
     protocol: zookeeper
     address: 10.1.51.96:2181
-#    address: 10.1.51.96:2181,10.1.51.96:2182
     id: zookeeper-registry
   provider:
     loadbalance: consistenthash
 
-
-#  registries:
-#    aa:
-#      address: zookeeper://10.1.51.96:2181
-#    bb:
-#      address: zookeeper://10.1.51.96:2182
-#  registry:
-#    protocol: zookeeper
-#    address: zookeeper://10.1.51.96:2181?backup=10.1.51.96:2182
-#    id: zookeeper-registry
 
 
 motan:
@@ -103,7 +92,7 @@ motan:
   annotation:
     package: com.example.provider.motan
   server:
-    export: 'motan:9999'
+    export: 'motan:9998'
     group: motangroup
     registry: registry
 

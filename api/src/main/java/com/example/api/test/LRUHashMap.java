@@ -7,10 +7,9 @@ import java.util.Map;
  * LinkedHashMap 实现lru算法
  * accessOrder 元素访问的时候 改变链表里面元素的属性 将当前访问的元素放到tail  查看afterNodeAccess
  * 在LinkedHashMap调用get方法的时候， 会判断accessOrder是否为true 如果为true 那么调用afterNodeAccess
- * 改变当前元素的位置：-----> javadoc : move node to last
- *
- * <p>
- * put->putVal 最后会调用afterNodeInsertion -->removeEldestEntry(first) 删除first 返回boolean
+ * 改变当前元素的位置：-----> javadoc : move node to last 将Entry放到链表的最后去（链表的靠前的位置是旧的entry, 靠后的时候新增的）
+ * 所以当调用access访问元素的时候是改变了元素的位置， 放到最新的位置， 就是设置元素为更“新” ；
+ * put->putVal 最后会调用afterNodeInsertion -->removeEldestEntry(first) 可能会删除first 返回boolean
  * 如果返回true 调用removeNode进行节点的删除
  *
  * @author shenzm

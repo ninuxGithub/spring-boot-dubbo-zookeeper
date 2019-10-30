@@ -6,6 +6,7 @@ import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
+import org.apache.spark.api.java.function.VoidFunction;
 import scala.Tuple2;
 
 import java.io.Serializable;
@@ -19,7 +20,8 @@ import java.util.*;
 public class SparkTest {
 
     public static void main(String[] args) {
-        JavaSparkContext sparkContext = new JavaSparkContext("local[4]","JavaWordCount",".",JavaSparkContext.jarOfClass(SparkTest.class));
+        JavaSparkContext sparkContext = new JavaSparkContext("local[4]", "JavaWordCount",
+                ".", JavaSparkContext.jarOfClass(SparkTest.class));
         System.out.println(sparkContext.getSparkHome());
 
         String path = "spart-demo/src/test/java/test.txt";
@@ -31,8 +33,8 @@ public class SparkTest {
         System.out.println("-------------------------------------------------------");
         System.out.println(lines.count());
         List<String> collect = lines.collect();
-        for (String s : collect){
-            System.out.println("collect : " + s);
+        for (String s : collect) {
+            System.out.println("line : " + s);
         }
 
         JavaRDD<String> contains = lines.filter(new Function<String, Boolean>() {
@@ -43,22 +45,31 @@ public class SparkTest {
         });
         System.out.println("join : " + Joiner.on(",").skipNulls().join(contains.collect()).toString());
 
-        JavaPairRDD<String, Integer> counts = lines.flatMap(s -> Arrays.asList(s.split(" ")).iterator())
-                .mapToPair(word -> new Tuple2<>(word, 1))
-                .reduceByKey((a, b) -> (Integer) a + (Integer) b);
+
+        JavaRDD<String> javaRDD = lines.flatMap(s -> Arrays.asList(s.split("")).iterator());
+        JavaPairRDD<String, Integer> counts = javaRDD
+                .mapToPair(word -> new Tuple2<String, Integer>(word, 1))
+                .reduceByKey((a, b) -> a + b);
         counts.saveAsTextFile(saveFile);
 
 
-        List<Integer> list = ImmutableList.of(1, 2, 3, 4, 5);
-        List<Integer> top3 = sparkContext.parallelize(list).top(3);
-        System.out.println(top3);
-
-        List<Tuple2<String, Integer>> tuples = counts.collect();
-        for (Tuple2<String, Integer> tuple : tuples) {
-            System.out.println(tuple._1() + "----- " + tuple._2());
-        }
+//        List<Integer> list = ImmutableList.of(1, 2, 3, 4, 5);
+//        List<Integer> top3 = sparkContext.parallelize(list).top(3);
+//        System.out.println(top3);
+//
+//        List<Tuple2<String, Integer>> tuples = counts.collect();
+//        for (Tuple2<String, Integer> tuple : tuples) {
+//            System.out.println(tuple._1() + "----- " + tuple._2());
+//        }
 
         //对JavaPairRDD运行top抛异常 不知道为何
+
+        counts.foreach(new VoidFunction<Tuple2<String, Integer>>() {
+            @Override
+            public void call(Tuple2<String, Integer> stringIntegerTuple2) throws Exception {
+                System.out.println(stringIntegerTuple2);
+            }
+        });
 //        List<Tuple2<String, Integer>> output = counts.top(2, new Comparator<Tuple2<String, Integer>>() {
 //
 //            @Override

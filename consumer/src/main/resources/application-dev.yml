@@ -46,9 +46,12 @@ spring:
       useGlobalDataSourceStat: true
       connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
     sqlserver:
-      url: jdbc:sqlserver://xxxxx:1433;DatabaseName=Minfo
-      username: xxx
-      password: xxx
+      url: jdbc:sqlserver://10.6.1.170:1433;DatabaseName=Minfo
+      username: F10writer
+      password: hundsun@1
+#      url: jdbc:sqlserver://xxxxx:1433;DatabaseName=Minfo
+#      username: xxx
+#      password: xxx
       driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
       maxActive: 200
       minIdle: 50
@@ -102,6 +105,8 @@ dubbo:
     protocol: zookeeper
     address: 10.1.51.96:2181
     id: zookeeper-registry
+  provider:
+    loadbalance: consistenthash
 
 ################motan config###################################
 motan:
